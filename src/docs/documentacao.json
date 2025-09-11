@@ -1,0 +1,2247 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "API Iguana-Jeri",
+    "description": "Description",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/categorias/": {
+      "get": {
+        "tags": [
+          "Categorias"
+        ],
+        "description": "Retorna lista de categorias",
+        "responses": {
+          "200": {
+            "description": "Retorna lista de categorias",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "nome": {
+                    "type": "string",
+                    "example": "Texto da categoria"
+                  },
+                  "descricao": {
+                    "type": "string",
+                    "example": "Descrição da categoria"
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Categorias"
+        ],
+        "description": "Cria uma Categoria",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nome": {
+                  "type": "string",
+                  "example": "Texto da Categoria"
+                },
+                "descricao": {
+                  "type": "string",
+                  "example": "Descrição da categoria"
+                }
+              },
+              "required": [
+                "nome",
+                "descricao"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registro criado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Registro criado com sucesso"
+                },
+                "tipo": {
+                  "type": "string",
+                  "example": "success"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categorias/{id}": {
+      "get": {
+        "tags": [
+          "Categorias"
+        ],
+        "description": "Retorna uma categoria",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retorna uma categoria",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "nome": {
+                  "type": "string",
+                  "example": "Texto da categoria"
+                },
+                "descricao": {
+                  "type": "string",
+                  "example": "Descrição da categoria"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Categorias"
+        ],
+        "description": "Edita uma categoria",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "nome": {
+                  "type": "string",
+                  "example": "Texto da Categoria"
+                },
+                "descricao": {
+                  "type": "string",
+                  "example": "Descrição da categoria"
+                }
+              },
+              "required": [
+                "id",
+                "nome",
+                "descricao"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Categoria atualizada.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Registro atualizado com sucesso."
+                },
+                "tipo": {
+                  "type": "string",
+                  "example": "success"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Categorias"
+        ],
+        "description": "Deleta uma categoria.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Categoria deletada",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Registro deletado com sucesso."
+                },
+                "tipo": {
+                  "type": "string",
+                  "example": "success"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clientes/": {
+      "get": {
+        "tags": [
+          "Clientes"
+        ],
+        "description": "Retorna lista de clientes",
+        "responses": {
+          "200": {
+            "description": "Retorna lista de clientes",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "nome": {
+                    "type": "string",
+                    "example": "Texto do cliente"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "Email do cliente"
+                  },
+                  "senha": {
+                    "type": "string",
+                    "example": "Senha do cliente"
+                  },
+                  "telefone": {
+                    "type": "string",
+                    "example": "Telefone do cliente"
+                  },
+                  "cpf": {
+                    "type": "string",
+                    "example": "CPF do cliente"
+                  },
+                  "data_nascimento": {
+                    "type": "string",
+                    "example": "Data de nascimento do cliente"
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Clientes"
+        ],
+        "description": "Registra um cliente",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nome": {
+                  "type": "string",
+                  "example": "Texto do cliente"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "Email do cliente"
+                },
+                "senha": {
+                  "type": "string",
+                  "example": "Senha do cliente"
+                },
+                "telefone": {
+                  "type": "string",
+                  "example": "Telefone do cliente"
+                },
+                "cpf": {
+                  "type": "string",
+                  "example": "CPF do cliente"
+                },
+                "data_nascimento": {
+                  "type": "string",
+                  "example": "Data de nascimento do cliente"
+                }
+              },
+              "required": [
+                "nome",
+                "email",
+                "senha",
+                "telefone",
+                "cpf",
+                "data_nascimento"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registro criado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Registro criado com sucesso"
+                },
+                "tipo": {
+                  "type": "string",
+                  "example": "success"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clientes/{id}": {
+      "get": {
+        "tags": [
+          "Clientes"
+        ],
+        "description": "Retorna um cliente",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retorna um cliente",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "nome": {
+                  "type": "string",
+                  "example": "Texto do cliente"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "Email do cliente"
+                },
+                "senha": {
+                  "type": "string",
+                  "example": "Senha do cliente"
+                },
+                "telefone": {
+                  "type": "string",
+                  "example": "Telefone do cliente"
+                },
+                "cpf": {
+                  "type": "string",
+                  "example": "CPF do cliente"
+                },
+                "data_nascimento": {
+                  "type": "string",
+                  "example": "Data de nascimento do cliente"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Clientes"
+        ],
+        "description": "Edita um cliente",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "nome": {
+                  "type": "string",
+                  "example": "Texto do cliente"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "Email do cliente"
+                },
+                "senha": {
+                  "type": "string",
+                  "example": "Senha do cliente"
+                },
+                "telefone": {
+                  "type": "string",
+                  "example": "Telefone do cliente"
+                },
+                "cpf": {
+                  "type": "string",
+                  "example": "CPF do cliente"
+                },
+                "data_nascimento": {
+                  "type": "string",
+                  "example": "Data de nascimento do cliente"
+                }
+              },
+              "required": [
+                "id",
+                "nome",
+                "email",
+                "senha",
+                "telefone",
+                "cpf",
+                "data_nascimento"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cliente atualizado.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Registro atualizado com sucesso."
+                },
+                "tipo": {
+                  "type": "string",
+                  "example": "success"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Clientes"
+        ],
+        "description": "Deleta um cliente.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cliente deletado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Registro deletado com sucesso."
+                },
+                "tipo": {
+                  "type": "string",
+                  "example": "success"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/enderecos/": {
+      "get": {
+        "tags": [
+          "Endereços"
+        ],
+        "description": "Retorna lista de endereços",
+        "responses": {
+          "200": {
+            "description": "Retorna lista de endereços",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "logradouro": {
+                    "type": "string",
+                    "example": "Texto do endereço"
+                  },
+                  "bairro": {
+                    "type": "string",
+                    "example": "Bairro do cliente"
+                  },
+                  "cidade": {
+                    "type": "string",
+                    "example": "Cidade que o cliente mora"
+                  },
+                  "estado": {
+                    "type": "string",
+                    "example": "Estado que o cliente mora"
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Endereços"
+        ],
+        "description": "Registra um endereço",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "logradouro": {
+                  "type": "string",
+                  "example": "Endereço registrado"
+                },
+                "bairro": {
+                  "type": "string",
+                  "example": "Bairro registrado"
+                },
+                "cidade": {
+                  "type": "string",
+                  "example": "Cidade registrada"
+                },
+                "estado": {
+                  "type": "string",
+                  "example": "Estado registrado"
+                }
+              },
+              "required": [
+                "logradouro",
+                "bairro",
+                "cidade",
+                "estado"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registro criado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Registro criado com sucesso"
+                },
+                "tipo": {
+                  "type": "string",
+                  "example": "success"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/enderecos/{id}": {
+      "get": {
+        "tags": [
+          "Endereços"
+        ],
+        "description": "Retorna um endereço",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retorna um endereço",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "logradouro": {
+                  "type": "string",
+                  "example": "Endereço registrado"
+                },
+                "bairro": {
+                  "type": "string",
+                  "example": "Bairro registrado"
+                },
+                "cidade": {
+                  "type": "string",
+                  "example": "Cidade registrada"
+                },
+                "estado": {
+                  "type": "string",
+                  "example": "Estado registrado"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Endereços"
+        ],
+        "description": "Edita um endereço",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "logradouro": {
+                  "type": "string",
+                  "example": "Endereço registrado"
+                },
+                "bairro": {
+                  "type": "string",
+                  "example": "Bairro registrado"
+                },
+                "cidade": {
+                  "type": "string",
+                  "example": "Cidade registrada"
+                },
+                "estado": {
+                  "type": "string",
+                  "example": "Estado registrado"
+                }
+              },
+              "required": [
+                "id",
+                "logradouro",
+                "bairro",
+                "cidade",
+                "estado"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Endereço atualizado.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Registro atualizado com sucesso."
+                },
+                "tipo": {
+                  "type": "string",
+                  "example": "success"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Endereços"
+        ],
+        "description": "Deleta um endereço.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Endereço deletado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Registro deletado com sucesso."
+                },
+                "tipo": {
+                  "type": "string",
+                  "example": "success"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pagamentos/": {
+      "get": {
+        "tags": [
+          "Pagamentos"
+        ],
+        "description": "Retorna lista de pagamentos",
+        "responses": {
+          "200": {
+            "description": "Retorna lista de pagamentos",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "metodo": {
+                    "type": "string",
+                    "example": "Metodo de pagamento"
+                  },
+                  "status": {
+                    "type": "string",
+                    "example": "Status do pagamento"
+                  },
+                  "data_pagamento": {
+                    "type": "string",
+                    "example": "Data do pagamento"
+                  },
+                  "valor": {
+                    "type": "string",
+                    "example": "Valor total"
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Pagamentos"
+        ],
+        "description": "Registra um pagamento",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "metodo": {
+                  "type": "string",
+                  "example": "Metodo de pagamento"
+                },
+                "status": {
+                  "type": "string",
+                  "example": "Status do pagamento"
+                },
+                "data_pagamento": {
+                  "type": "string",
+                  "example": "Data do pagamento"
+                },
+                "valor": {
+                  "type": "string",
+                  "example": "Valor total"
+                }
+              },
+              "required": [
+                "metodo",
+                "status",
+                "data_pagamento",
+                "valor"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registro criado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Registro criado com sucesso"
+                },
+                "tipo": {
+                  "type": "string",
+                  "example": "success"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pagamentos/{id}": {
+      "get": {
+        "tags": [
+          "Pagamentos"
+        ],
+        "description": "Retorna um pagamento",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retorna um pagamento",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "metodo": {
+                  "type": "string",
+                  "example": "Metodo de pagamento"
+                },
+                "status": {
+                  "type": "string",
+                  "example": "Status do pagamento"
+                },
+                "data_pagamento": {
+                  "type": "string",
+                  "example": "Data do pagamento"
+                },
+                "valor": {
+                  "type": "string",
+                  "example": "Valor total"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Pagamentos"
+        ],
+        "description": "Edita um pagamento",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "metodo": {
+                  "type": "string",
+                  "example": "Metodo de pagamento"
+                },
+                "status": {
+                  "type": "string",
+                  "example": "Status do pagamento"
+                },
+                "data_pagamento": {
+                  "type": "string",
+                  "example": "Data do pagamento"
+                },
+                "valor": {
+                  "type": "string",
+                  "example": "Valor total"
+                }
+              },
+              "required": [
+                "id",
+                "metodo",
+                "status",
+                "data_pagamento",
+                "valor"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pagamento atualizado.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Registro atualizado com sucesso."
+                },
+                "tipo": {
+                  "type": "string",
+                  "example": "success"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Pagamentos"
+        ],
+        "description": "Deleta um pagamento.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pagamento deletado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Registro deletado com sucesso."
+                },
+                "tipo": {
+                  "type": "string",
+                  "example": "success"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pedidos/": {
+      "get": {
+        "tags": [
+          "Pedidos"
+        ],
+        "description": "Retorna lista de pedidos",
+        "responses": {
+          "200": {
+            "description": "Retorna lista de pedidos",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "data_pedido": {
+                    "type": "string",
+                    "example": "Data do pedido"
+                  },
+                  "status": {
+                    "type": "string",
+                    "example": "Status do pedido"
+                  },
+                  "valor": {
+                    "type": "string",
+                    "example": "Valor total"
+                  },
+                  "transportadora": {
+                    "type": "string",
+                    "example": "Transportadora responsável pela entrega"
+                  },
+                  "data_envio": {
+                    "type": "string",
+                    "example": "Data do envio"
+                  },
+                  "data_entrega": {
+                    "type": "string",
+                    "example": "Data da entrega"
+                  },
+                  "desconto": {
+                    "type": "string",
+                    "example": "Desconto do pedido"
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Pedidos"
+        ],
+        "description": "Registra um pedido",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data_pedido": {
+                  "type": "string",
+                  "example": "Data do pedido"
+                },
+                "status": {
+                  "type": "string",
+                  "example": "Status do pedido"
+                },
+                "valor": {
+                  "type": "string",
+                  "example": "Valor total"
+                },
+                "transportadora": {
+                  "type": "string",
+                  "example": "Transportadora responsável pela entrega"
+                },
+                "data_envio": {
+                  "type": "string",
+                  "example": "Data do envio"
+                },
+                "data_entrega": {
+                  "type": "string",
+                  "example": "Data da entrega"
+                },
+                "desconto": {
+                  "type": "string",
+                  "example": "Desconto do pedido"
+                }
+              },
+              "required": [
+                "data_pedido",
+                "status",
+                "valor",
+                "transportadora",
+                "data_envio",
+                "data_entrega",
+                "desconto"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registro criado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Registro criado com sucesso"
+                },
+                "tipo": {
+                  "type": "string",
+                  "example": "success"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pedidos/{id}": {
+      "get": {
+        "tags": [
+          "Pedidos"
+        ],
+        "description": "Retorna um pedido",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retorna um pedido",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "data_pedido": {
+                  "type": "string",
+                  "example": "Data do pedido"
+                },
+                "status": {
+                  "type": "string",
+                  "example": "Status do pedido"
+                },
+                "valor": {
+                  "type": "string",
+                  "example": "Valor total"
+                },
+                "transportadora": {
+                  "type": "string",
+                  "example": "Transportadora responsável pela entrega"
+                },
+                "data_envio": {
+                  "type": "string",
+                  "example": "Data do envio"
+                },
+                "data_entrega": {
+                  "type": "string",
+                  "example": "Data da entrega"
+                },
+                "desconto": {
+                  "type": "string",
+                  "example": "Desconto do pedido"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Pedidos"
+        ],
+        "description": "Edita um pedido",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "data_pedido": {
+                  "type": "string",
+                  "example": "Data do pedido"
+                },
+                "status": {
+                  "type": "string",
+                  "example": "Status do pedido"
+                },
+                "valor": {
+                  "type": "string",
+                  "example": "Valor total"
+                },
+                "transportadora": {
+                  "type": "string",
+                  "example": "Transportadora responsável pela entrega"
+                },
+                "data_envio": {
+                  "type": "string",
+                  "example": "Data do envio"
+                },
+                "data_entrega": {
+                  "type": "string",
+                  "example": "Data da entrega"
+                },
+                "desconto": {
+                  "type": "string",
+                  "example": "Desconto do pedido"
+                }
+              },
+              "required": [
+                "id",
+                "data_pedido",
+                "status",
+                "valor",
+                "transportadora",
+                "data_envio",
+                "data_entrega",
+                "desconto"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pedido atualizado.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Registro atualizado com sucesso."
+                },
+                "tipo": {
+                  "type": "string",
+                  "example": "success"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Pedidos"
+        ],
+        "description": "Deleta um pedido.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pedido deletado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Registro deletado com sucesso."
+                },
+                "tipo": {
+                  "type": "string",
+                  "example": "success"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/produtos/": {
+      "get": {
+        "tags": [
+          "Produtos"
+        ],
+        "description": "Retorna lista de produtos",
+        "responses": {
+          "200": {
+            "description": "Retorna lista de produtos",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "nome": {
+                    "type": "string",
+                    "example": "Nome do produto"
+                  },
+                  "descricao": {
+                    "type": "string",
+                    "example": "Descrição do produto"
+                  },
+                  "tamanha": {
+                    "type": "string",
+                    "example": "Tamanho do produto"
+                  },
+                  "cor": {
+                    "type": "string",
+                    "example": "Cor do produto"
+                  },
+                  "valor": {
+                    "type": "string",
+                    "example": "Valor do produto"
+                  },
+                  "estoque": {
+                    "type": "string",
+                    "example": "Quantidade disponível do produto"
+                  },
+                  "desconto": {
+                    "type": "string",
+                    "example": "Desconto do produto"
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Produtos"
+        ],
+        "description": "Registra um produto",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nome": {
+                  "type": "string",
+                  "example": "Nome do produto"
+                },
+                "descricao": {
+                  "type": "string",
+                  "example": "Descrição do produto"
+                },
+                "tamanha": {
+                  "type": "string",
+                  "example": "Tamanho do produto"
+                },
+                "cor": {
+                  "type": "string",
+                  "example": "Cor do produto"
+                },
+                "valor": {
+                  "type": "string",
+                  "example": "Valor do produto"
+                },
+                "estoque": {
+                  "type": "string",
+                  "example": "Quantidade disponível do produto"
+                },
+                "desconto": {
+                  "type": "string",
+                  "example": "Desconto do produto"
+                }
+              },
+              "required": [
+                "nome",
+                "descricao",
+                "tamanha",
+                "cor",
+                "valor",
+                "estoque",
+                "desconto"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registro criado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Registro criado com sucesso"
+                },
+                "tipo": {
+                  "type": "string",
+                  "example": "success"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/produtos/{id}": {
+      "get": {
+        "tags": [
+          "Produtos"
+        ],
+        "description": "Retorna um produto",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retorna um produto",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "nome": {
+                  "type": "string",
+                  "example": "Nome do produto"
+                },
+                "descricao": {
+                  "type": "string",
+                  "example": "Descrição do produto"
+                },
+                "tamanha": {
+                  "type": "string",
+                  "example": "Tamanho do produto"
+                },
+                "cor": {
+                  "type": "string",
+                  "example": "Cor do produto"
+                },
+                "valor": {
+                  "type": "string",
+                  "example": "Valor do produto"
+                },
+                "estoque": {
+                  "type": "string",
+                  "example": "Quantidade disponível do produto"
+                },
+                "desconto": {
+                  "type": "string",
+                  "example": "Desconto do produto"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Produtos"
+        ],
+        "description": "Edita um produto",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "nome": {
+                  "type": "string",
+                  "example": "Nome do produto"
+                },
+                "descricao": {
+                  "type": "string",
+                  "example": "Descrição do produto"
+                },
+                "tamanha": {
+                  "type": "string",
+                  "example": "Tamanho do produto"
+                },
+                "cor": {
+                  "type": "string",
+                  "example": "Cor do produto"
+                },
+                "valor": {
+                  "type": "string",
+                  "example": "Valor do produto"
+                },
+                "estoque": {
+                  "type": "string",
+                  "example": "Quantidade disponível do produto"
+                },
+                "desconto": {
+                  "type": "string",
+                  "example": "Desconto do produto"
+                }
+              },
+              "required": [
+                "id",
+                "nome",
+                "descricao",
+                "tamanha",
+                "cor",
+                "valor",
+                "estoque",
+                "desconto"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produto atualizado.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Registro atualizado com sucesso."
+                },
+                "tipo": {
+                  "type": "string",
+                  "example": "success"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Produtos"
+        ],
+        "description": "Deleta um produto.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produto deletado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Registro deletado com sucesso."
+                },
+                "tipo": {
+                  "type": "string",
+                  "example": "success"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

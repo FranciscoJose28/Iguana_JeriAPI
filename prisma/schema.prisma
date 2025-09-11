@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model categoria {
+  id        Int       @id @unique(map: "id") @default(autoincrement())
+  nome      String    @db.VarChar(255)
+  descricao String    @db.VarChar(255)
+  produto   produto[]
+}
+
+model cliente {
+  id              Int         @id @unique(map: "id") @default(autoincrement())
+  nome            String      @db.VarChar(255)
+  email           String      @db.VarChar(255)
+  senha           String      @db.VarChar(255)
+  telefone        String      @db.VarChar(255)
+  cpf             String      @db.VarChar(255)
+  data_nascimento String      @db.VarChar(255)
+  enderecos       enderecos[]
+  pedido          pedido[]
+}
+
+model enderecos {
+  id         Int     @id @unique(map: "id") @default(autoincrement())
+  logradouro String  @db.VarChar(255)
+  bairro     String  @db.VarChar(255)
+  cidade     String  @db.VarChar(255)
+  estado     String  @db.VarChar(255)
+  id_cliente Int
+  cliente    cliente @relation(fields: [id_cliente], references: [id], onUpdate: Restrict, map: "enderecos_fk5")
+
+  @@index([id_cliente], map: "enderecos_fk5")
+}
+
+model pagamento {
+  id             Int    @id @unique(map: "id") @default(autoincrement())
+  metodo         String @db.VarChar(255)
+  status         String @db.VarChar(255)
+  data_pagamento String @db.VarChar(255)
+  valor          Float  @db.Float
+  id_pedido      Int
+  pedido         pedido @relation(fields: [id_pedido], references: [id], onUpdate: Restrict, map: "pagamento_fk5")
+
+  @@index([id_pedido], map: "pagamento_fk5")
+}
+
+model pedido {
+  id              Int               @id @unique(map: "id") @default(autoincrement())
+  data_pedido     DateTime          @db.DateTime(0)
+  status          String            @db.VarChar(255)
+  valor           Float             @db.Float
+  id_cliente      Int
+  transportadora  String            @db.VarChar(255)
+  data_envio      DateTime          @db.DateTime(0)
+  data_entrega    DateTime          @db.DateTime(0)
+  desconto        Int?
+  pagamento       pagamento[]
+  cliente         cliente           @relation(fields: [id_cliente], references: [id], onUpdate: Restrict, map: "pedido_fk4")
+  produtos_pedido produtos_pedido[]
+
+  @@index([id_cliente], map: "pedido_fk4")
+}
+
+model produto {
+  id              Int               @id @unique(map: "id") @default(autoincrement())
+  nome            String            @db.VarChar(255)
+  descricao       String            @db.VarChar(255)
+  tamanho         String            @db.VarChar(255)
+  cor             String            @db.VarChar(255)
+  valor           String            @db.VarChar(255)
+  estoque         String            @db.VarChar(255)
+  id_categoria    Int
+  desconto        Int?
+  categoria       categoria         @relation(fields: [id_categoria], references: [id], onUpdate: Restrict, map: "produto_fk7")
+  produto_imagem  produto_imagem[]
+  produtos_pedido produtos_pedido[]
+
+  @@index([id_categoria], map: "produto_fk7")
+}
+
+model produto_imagem {
+  id         Int     @id @unique(map: "id") @default(autoincrement())
+  imagem     String  @db.Text
+  id_produto Int
+  produto    produto @relation(fields: [id_produto], references: [id], onUpdate: Restrict, map: "produto_imagem_fk2")
+
+  @@index([id_produto], map: "produto_imagem_fk2")
+}
+
+model produtos_pedido {
+  id         Int     @id @unique(map: "id") @default(autoincrement())
+  id_produto Int
+  id_pedido  Int
+  produto    produto @relation(fields: [id_produto], references: [id], onUpdate: Restrict, map: "produtos_pedido_fk1")
+  pedido     pedido  @relation(fields: [id_pedido], references: [id], onUpdate: Restrict, map: "produtos_pedido_fk2")
+
+  @@index([id_produto], map: "produtos_pedido_fk1")
+  @@index([id_pedido], map: "produtos_pedido_fk2")
+}
