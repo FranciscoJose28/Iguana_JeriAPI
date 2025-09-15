@@ -1,5 +1,5 @@
 import {Router} from "express"
-import { buscarTodos, buscarUm, criar, deletar, editar } from "../controllers/produtoController.js"
+import { buscarTodos, buscarUm, criar, deletar, editar, subirImagem } from "../controllers/produtoController.js"
 
 export const produtoRoutes = Router()
 
@@ -85,6 +85,10 @@ produtoRoutes.post("/", async (req, res) => {
             }
     } */
     res.json(await criar(req.body))
+})
+
+produtoRoutes.post("/imagem", async (req, res) => {
+    res.json(await subirImagem(req));
 })
 
 produtoRoutes.put("/:id", async (req, res) => {

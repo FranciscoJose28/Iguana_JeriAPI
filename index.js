@@ -15,21 +15,22 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
-app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+// app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.use("/categorias", categoriaRoutes)
+app.use("/categorias", categoriaRoutes);
 
-app.use("/clientes", clienteRoutes)
+app.use("/clientes", clienteRoutes);
 
-app.use("/enderecos", enderecosRoutes)
+app.use("/enderecos", enderecosRoutes);
 
-app.use("/imagens", imagensRoutes)
+app.use("/imagens", imagensRoutes);
 
-app.use("/pagamentos", pagamentoRoutes)
+app.use("/pagamentos", pagamentoRoutes);
 
-app.use("/pedidos", pedidoRoutes)
+app.use("/pedidos", pedidoRoutes);
 
-app.use("/produtos", produtoRoutes)
+app.use("/produtos", produtoRoutes);
+app.use('/uploads/produtos', express.static('./src/uploads/produtos'));
 
 app.listen(8000, () => {
     console.log("http://localhost:8000");
