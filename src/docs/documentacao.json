@@ -752,6 +752,10 @@
                   "estado": {
                     "type": "string",
                     "example": "Estado que o cliente mora"
+                  },
+                  "id_cliente": {
+                    "type": "string",
+                    "example": "1"
                   }
                 }
               },
@@ -808,13 +812,18 @@
                 "estado": {
                   "type": "string",
                   "example": "Estado registrado"
+                },
+                "id_cliente": {
+                  "type": "number",
+                  "example": 1
                 }
               },
               "required": [
                 "logradouro",
                 "bairro",
                 "cidade",
-                "estado"
+                "estado",
+                "id_cliente"
               ]
             }
           }
@@ -900,6 +909,10 @@
                 "estado": {
                   "type": "string",
                   "example": "Estado registrado"
+                },
+                "id_cliente": {
+                  "type": "number",
+                  "example": 1
                 }
               },
               "xml": {
@@ -965,6 +978,10 @@
                 "estado": {
                   "type": "string",
                   "example": "Estado registrado"
+                },
+                "id_cliente": {
+                  "type": "number",
+                  "example": 1
                 }
               },
               "required": [
@@ -972,7 +989,8 @@
                 "logradouro",
                 "bairro",
                 "cidade",
-                "estado"
+                "estado",
+                "id_cliente"
               ]
             }
           }
@@ -1040,6 +1058,62 @@
                 "mensagem": {
                   "type": "string",
                   "example": "Registro deletado com sucesso."
+                },
+                "tipo": {
+                  "type": "string",
+                  "example": "success"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/imagens/{id}": {
+      "delete": {
+        "tags": [
+          "Produto Imagem"
+        ],
+        "description": "Deleta uma imagem de produto",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Imagem deletada",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Imagem deletada com sucesso."
                 },
                 "tipo": {
                   "type": "string",

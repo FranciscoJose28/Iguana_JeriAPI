@@ -3,6 +3,7 @@ import cors from "cors"
 import {categoriaRoutes} from "./src/routes/categoriaRoutes.js"
 import { clienteRoutes } from "./src/routes/clienteRoutes.js"
 import {enderecosRoutes} from "./src/routes/enderecosRoutes.js"
+import { imagensRoutes } from "./src/routes/imagensRoutes.js"
 import { pagamentoRoutes } from "./src/routes/pagamentoRoutes.js"
 import { pedidoRoutes } from "./src/routes/pedidoRoutes.js"
 import { produtoRoutes } from "./src/routes/produtoRoutes.js"
@@ -21,6 +22,8 @@ app.use("/categorias", categoriaRoutes)
 app.use("/clientes", clienteRoutes)
 
 app.use("/enderecos", enderecosRoutes)
+
+app.use("/imagens", imagensRoutes)
 
 app.use("/pagamentos", pagamentoRoutes)
 

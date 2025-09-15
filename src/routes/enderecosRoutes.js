@@ -13,7 +13,8 @@ enderecosRoutes.get("/", async (req, res) => {
                 logradouro: "Texto do endereço",
                 bairro: "Bairro do cliente",
                 cidade: "Cidade que o cliente mora",
-                estado: "Estado que o cliente mora"
+                estado: "Estado que o cliente mora",
+                id_cliente: "1"
             }]
     } */
     /* #swagger.responses[422] = {
@@ -36,7 +37,8 @@ enderecosRoutes.get("/:id", async (req, res) => {
                 logradouro: "Endereço registrado",
                 bairro: "Bairro registrado",
                 cidade: "Cidade registrada",
-                estado: "Estado registrado"
+                estado: "Estado registrado",
+                id_cliente: 1
             }
     } */
     /* #swagger.responses[422] = {
@@ -58,7 +60,8 @@ enderecosRoutes.post("/", async (req, res) => {
                     $logradouro: "Endereço registrado",
                     $bairro: "Bairro registrado",
                     $cidade: "Cidade registrada",
-                    $estado: "Estado registrado"
+                    $estado: "Estado registrado",
+                    $id_cliente: 1
                 }
         } */
     /* #swagger.responses[200] = {
@@ -88,7 +91,8 @@ enderecosRoutes.put("/:id", async (req, res) => {
                     $logradouro: "Endereço registrado",
                     $bairro: "Bairro registrado",
                     $cidade: "Cidade registrada",
-                    $estado: "Estado registrado"
+                    $estado: "Estado registrado",
+                    $id_cliente: 1
                 }
         } */
     /* #swagger.responses[200] = {
