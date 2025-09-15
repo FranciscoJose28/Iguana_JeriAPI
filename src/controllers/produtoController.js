@@ -108,7 +108,7 @@ async function deletar(id) {
     }
 }
 
-async function subirImagem(req) {
+async function criarImagem(req) {
     try {
         const form = formidable({});
 
@@ -167,6 +167,49 @@ async function subirImagem(req) {
     }
 }
 
+async function buscarTodasImagens() {
+    try {
+        return await prisma.produto_imagem.findMany()
+    } catch (error) {
+        return {
+            tipo: "error",
+            mensagem:error.message
+        }
+    }
+}
+
+async function deletarImagem(id) {
+    try {
+        const imagem = await prisma.produto_imagem.findFirst({
+            where: { id: Number(id) }
+        });
+        if(!imagem) {
+            return {
+                tipo: "error",
+                mensagem: "Imagem não encontrada."
+            };
+        }
+
+        await prisma.produto_imagem.delete({
+            where: { id: Number(id) }
+        });
+
+        const filePath = path.join(process.cwd(), "uploads/produtos", imagem.imagem);
+
+        if(fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+        }
+        return {
+            tipo: "success",
+            mensagem: "Imagem deletada com sucesso."
+        };
+    } catch (error) {
+        return {
+            tipo: "error",
+            mensagem: error.message
+        }
+    }
+}
 
 export {
     buscarTodos,
@@ -174,5 +217,7 @@ export {
     criar,
     editar,
     deletar,
-    subirImagem
+    criarImagem,
+    buscarTodasImagens,
+    deletarImagem
 }

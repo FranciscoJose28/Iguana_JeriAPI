@@ -1,5 +1,5 @@
 import {Router} from "express"
-import { buscarTodos, buscarUm, criar, deletar, editar, subirImagem } from "../controllers/produtoController.js"
+import { buscarTodos, buscarUm, criar, deletar, editar, criarImagem, buscarTodasImagens } from "../controllers/produtoController.js"
 
 export const produtoRoutes = Router()
 
@@ -29,6 +29,29 @@ produtoRoutes.get("/", async (req, res) => {
     res.json(await buscarTodos())
 })
 
+// produtoRoutes.get("/imagem", async (req, res) => {
+//     // #swagger.tags = ['Imagens']
+//     // #swagger.description = 'Retorna lista de imagens'
+//     /* #swagger.responses[200] = {
+//             description: 'Retorna lista de imagens',
+//             schema: [{
+//                 id: 1,
+//                 imagem: "endereço da imagem",
+//                 id_produto: 1
+//             }]
+//     } */
+//     /* #swagger.responses[422] = {
+//             description: 'Erro interno',
+//             schema: {
+//                 tipo: "error",
+//                 mensagem: 'mensagem do sistema'
+//             }
+//     } */
+//    console.log("teste");
+   
+//     res.json(await buscarTodasImagens())
+// })
+
 produtoRoutes.get("/:id", async (req, res) => {
     // #swagger.tags = ['Produtos']
     // #swagger.description = 'Retorna um produto'
@@ -52,7 +75,13 @@ produtoRoutes.get("/:id", async (req, res) => {
                 mensagem: 'mensagem do sistema'
             }
     } */
-    res.json(await buscarUm(req.params.id))
+   
+   if(req.params.id == "imagem"){
+        console.log(req.params.id);
+        res.json(await buscarTodasImagens())
+    } else{
+        res.json(await buscarUm(req.params.id))
+    }
 })
 
 produtoRoutes.post("/", async (req, res) => {
@@ -88,7 +117,7 @@ produtoRoutes.post("/", async (req, res) => {
 })
 
 produtoRoutes.post("/imagem", async (req, res) => {
-    res.json(await subirImagem(req));
+    res.json(await criarImagem(req));
 })
 
 produtoRoutes.put("/:id", async (req, res) => {
@@ -143,3 +172,23 @@ produtoRoutes.delete("/:id", async (req, res) => {
     } */
     res.json(await deletar(req.params.id))
 })
+
+produtoRoutes.delete("/imagem/:id", async (req, res) => {
+    // #swagger.tags = ['Produto Imagem']
+    // #swagger.description = 'Deleta uma imagem de produto'
+    /* #swagger.responses[200] = {
+            description: 'Imagem deletada',
+            schema: {
+                mensagem: 'Imagem deletada com sucesso.',
+                tipo: 'success'
+            }
+    } */
+    /* #swagger.responses[422] = {
+            description: 'Erro interno',
+            schema: {
+                tipo: "error",
+                mensagem: 'mensagem do sistema'
+            }
+    } */
+   res.json(await deletarImagem(req.params.id));
+});
