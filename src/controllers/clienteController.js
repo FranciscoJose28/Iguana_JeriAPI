@@ -1,4 +1,5 @@
 import { prisma } from "../utils/index.js";
+import bcrypt from "bcrypt";
 
 async function buscarTodos() {
     try {
@@ -6,7 +7,7 @@ async function buscarTodos() {
     } catch (error) {
         return {
             tipo: "error",
-            mensagem:error.message
+            mensagem: error.message
         }
     }
 }
@@ -14,11 +15,11 @@ async function buscarTodos() {
 async function buscarUm(id) {
     try {
         let req = await prisma.cliente.findFirst({
-            where:{
+            where: {
                 id: Number(id)
             }
         })
-        if(req){
+        if (req) {
             return {
                 tipo: "error",
                 mensagem: "Registro não encontrado."
@@ -27,17 +28,19 @@ async function buscarUm(id) {
     } catch (error) {
         return {
             tipo: "error",
-            mensagem:error.message
+            mensagem: error.message
         }
     }
 }
 
 async function criar(dados) {
     try {
+        let senhaSegura = await bcrypt.hash(dados.senha, 10);
+        dados = { ...dados, senha: senhaSegura };
         let req = await prisma.cliente.create({
             data: dados
         })
-        if(req){
+        if (req) {
             return {
                 tipo: "success",
                 mensagem: "Registro criado com sucesso!"
@@ -46,7 +49,7 @@ async function criar(dados) {
     } catch (error) {
         return {
             tipo: "error",
-            mensagem:error.message
+            mensagem: error.message
         }
     }
 }
@@ -54,12 +57,12 @@ async function criar(dados) {
 async function editar(dados, id) {
     try {
         let req = await prisma.cliente.update({
-            where:{
+            where: {
                 id: Number(id)
             },
             data: dados
         })
-        if(req){
+        if (req) {
             return {
                 tipo: "success",
                 mensagem: "Registro editado com sucesso!"
@@ -68,7 +71,7 @@ async function editar(dados, id) {
     } catch (error) {
         return {
             tipo: "error",
-            mensagem:error.message
+            mensagem: error.message
         }
     }
 }
@@ -76,11 +79,11 @@ async function editar(dados, id) {
 async function deletar(id) {
     try {
         let req = await prisma.cliente.delete({
-            where:{
+            where: {
                 id: Number(id)
             }
         })
-        if(req){
+        if (req) {
             return {
                 tipo: "success",
                 mensagem: "Registro deletado com sucesso!"
@@ -89,7 +92,30 @@ async function deletar(id) {
     } catch (error) {
         return {
             tipo: "error",
-            mensagem:error.message
+            mensagem: error.message
+        }
+    }
+}
+
+async function login(dados) {
+    try {
+        let clienteExiste = await prisma.cliente.findFirst({
+            where: {
+                email: dados.email
+            }
+        })
+        if (clienteExiste) {
+            let senhaEValida = await bcrypt.compare(dados.senha, clienteExiste.senha);
+            return senhaEValida;
+        }
+        return {
+            tipo: "warning",
+            mensagem: "email ou senha inválido"
+        }
+    } catch (error) {
+        return {
+            tipo: "error",
+            mensagem: error.message
         }
     }
 }
@@ -99,5 +125,6 @@ export {
     buscarUm,
     criar,
     editar,
-    deletar
+    deletar,
+    login
 }

@@ -1,9 +1,10 @@
 import {Router} from "express"
 import { buscarTodos, buscarUm, criar, deletar, editar } from "../controllers/clienteController.js"
+import { rotaProtegida } from "../utils/index.js"
 
 export const clienteRoutes = Router()
 
-clienteRoutes.get("/", async (req, res) => {
+clienteRoutes.get("/", rotaProtegida, async (req, res) => {
     // #swagger.tags = ['Clientes']
     // #swagger.description = 'Retorna lista de clientes'
     /* #swagger.responses[200] = {
@@ -28,7 +29,7 @@ clienteRoutes.get("/", async (req, res) => {
     res.json(await buscarTodos())
 })
 
-clienteRoutes.get("/:id", async (req, res) => {
+clienteRoutes.get("/:id", rotaProtegida,  async (req, res) => {
     // #swagger.tags = ['Clientes']
     // #swagger.description = 'Retorna um cliente'
     /* #swagger.responses[200] = {
@@ -84,7 +85,7 @@ clienteRoutes.post("/", async (req, res) => {
     res.json(await criar(req.body))
 })
 
-clienteRoutes.put("/:id", async (req, res) => {
+clienteRoutes.put("/:id", rotaProtegida,  async (req, res) => {
     // #swagger.tags = ['Clientes']
     // #swagger.description = 'Edita um cliente'
     /* #swagger.parameters['obj'] = {
@@ -116,7 +117,7 @@ clienteRoutes.put("/:id", async (req, res) => {
     res.json(await editar(req.body, req.params.id))
 })
 
-clienteRoutes.delete("/:id", async (req, res) => {
+clienteRoutes.delete("/:id", rotaProtegida,  async (req, res) => {
     // #swagger.tags = ['Clientes']
     // #swagger.description = 'Deleta um cliente.'
     /* #swagger.responses[200] = {
