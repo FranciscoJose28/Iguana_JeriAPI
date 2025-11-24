@@ -16,22 +16,41 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
-// app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.get("/", (req, res) => {
+    res.redirect("/docs")
+})
+
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.post("/login", async (req, res) => {
-    //
+    // #swagger.tags = ['Logins']
+    // #swagger.description = 'Retorna os dados de quem logou'
+    /* #swagger.responses[200] = {
+            description: 'Retorna os dados de quem logou',
+            schema: {
+                id: 1,
+                email: "Email do cliente"
+            }
+    } */
+    /* #swagger.responses[422] = {
+            description: 'Erro interno',
+            schema: {
+                tipo: "error",
+                mensagem: 'mensagem do sistema'
+            }
+    } */
     res.json(await login(req.body));
 });
 
-app.use("/categorias", rotaProtegida, categoriaRoutes);
+app.use("/categorias", categoriaRoutes); //rotaProtegida,
 
 app.use("/clientes", clienteRoutes);
 
-app.use("/enderecos", enderecosRoutes);
+app.use("/enderecos", enderecosRoutes); //rotaProtegida,
 
-app.use("/pagamentos", pagamentoRoutes);
+app.use("/pagamentos", pagamentoRoutes); //rotaProtegida,
 
-app.use("/pedidos", pedidoRoutes);
+app.use("/pedidos", pedidoRoutes); //rotaProtegida,
 
 app.use("/produtos", produtoRoutes);
 

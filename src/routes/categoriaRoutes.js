@@ -1,5 +1,6 @@
 import {Router} from "express"
 import { buscarTodos, buscarUm, criar, deletar, editar } from "../controllers/categoriaController.js"
+import { rotaProtegida } from "../utils/index.js"
 
 export const categoriaRoutes = Router()
 

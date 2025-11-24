@@ -1,5 +1,6 @@
 import {Router} from "express"
-import { buscarTodos, buscarUm, criar, deletar, editar, criarImagem, buscarTodasImagens } from "../controllers/produtoController.js"
+import { buscarTodos, buscarUm, criar, deletar, editar, criarImagem, buscarTodasImagens, pesquisa } from "../controllers/produtoController.js"
+import { rotaProtegida } from "../utils/index.js"
 
 export const produtoRoutes = Router()
 
@@ -84,7 +85,7 @@ produtoRoutes.get("/:id", async (req, res) => {
     }
 })
 
-produtoRoutes.post("/", async (req, res) => {
+produtoRoutes.post("/", rotaProtegida, async (req, res) => {
     // #swagger.tags = ['Produtos']
     // #swagger.description = 'Registra um produto'
     /* #swagger.parameters['obj'] = {
@@ -116,11 +117,15 @@ produtoRoutes.post("/", async (req, res) => {
     res.json(await criar(req.body))
 })
 
-produtoRoutes.post("/imagem", async (req, res) => {
+produtoRoutes.post("/pesquisa", async (req, res) => {
+    res.json(await pesquisa(req.body.palavra))
+})
+
+produtoRoutes.post("/imagem", rotaProtegida, async (req, res) => {
     res.json(await criarImagem(req));
 })
 
-produtoRoutes.put("/:id", async (req, res) => {
+produtoRoutes.put("/:id", rotaProtegida, async (req, res) => {
     // #swagger.tags = ['Produtos']
     // #swagger.description = 'Edita um produto'
     /* #swagger.parameters['obj'] = {
@@ -153,7 +158,7 @@ produtoRoutes.put("/:id", async (req, res) => {
     res.json(await editar(req.body, req.params.id))
 })
 
-produtoRoutes.delete("/:id", async (req, res) => {
+produtoRoutes.delete("/:id", rotaProtegida, async (req, res) => {
     // #swagger.tags = ['Produtos']
     // #swagger.description = 'Deleta um produto.'
     /* #swagger.responses[200] = {
@@ -173,7 +178,7 @@ produtoRoutes.delete("/:id", async (req, res) => {
     res.json(await deletar(req.params.id))
 })
 
-produtoRoutes.delete("/imagem/:id", async (req, res) => {
+produtoRoutes.delete("/imagem/:id", rotaProtegida, async (req, res) => {
     // #swagger.tags = ['Produto Imagem']
     // #swagger.description = 'Deleta uma imagem de produto'
     /* #swagger.responses[200] = {

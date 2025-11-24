@@ -11,12 +11,74 @@
     "http"
   ],
   "paths": {
+    "/login": {
+      "post": {
+        "tags": [
+          "Logins"
+        ],
+        "description": "Retorna lista de logins",
+        "responses": {
+          "200": {
+            "description": "Retorna lista de logins",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "Email do cliente"
+                  },
+                  "senha": {
+                    "type": "string",
+                    "example": "Senha do cliente"
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
     "/categorias/": {
       "get": {
         "tags": [
           "Categorias"
         ],
         "description": "Retorna lista de categorias",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Retorna lista de categorias",
@@ -71,6 +133,11 @@
         ],
         "description": "Cria uma Categoria",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "obj",
             "in": "body",
@@ -147,6 +214,11 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
@@ -204,6 +276,11 @@
             "name": "id",
             "in": "path",
             "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
             "type": "string"
           },
           {
@@ -285,6 +362,11 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
@@ -335,6 +417,13 @@
           "Clientes"
         ],
         "description": "Retorna lista de clientes",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Retorna lista de clientes",
@@ -405,6 +494,11 @@
         ],
         "description": "Registra um cliente",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "obj",
             "in": "body",
@@ -501,6 +595,11 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
@@ -574,6 +673,11 @@
             "name": "id",
             "in": "path",
             "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
             "type": "string"
           },
           {
@@ -675,6 +779,11 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
@@ -725,6 +834,13 @@
           "Endereços"
         ],
         "description": "Retorna lista de endereços",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Retorna lista de endereços",
@@ -791,6 +907,11 @@
         ],
         "description": "Registra um endereço",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "obj",
             "in": "body",
@@ -882,6 +1003,11 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
@@ -951,6 +1077,11 @@
             "name": "id",
             "in": "path",
             "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
             "type": "string"
           },
           {
@@ -1047,6 +1178,11 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
@@ -1091,68 +1227,19 @@
         }
       }
     },
-    "/imagens/{id}": {
-      "delete": {
-        "tags": [
-          "Produto Imagem"
-        ],
-        "description": "Deleta uma imagem de produto",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Imagem deletada",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "mensagem": {
-                  "type": "string",
-                  "example": "Imagem deletada com sucesso."
-                },
-                "tipo": {
-                  "type": "string",
-                  "example": "success"
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "422": {
-            "description": "Erro interno",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "tipo": {
-                  "type": "string",
-                  "example": "error"
-                },
-                "mensagem": {
-                  "type": "string",
-                  "example": "mensagem do sistema"
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          }
-        }
-      }
-    },
     "/pagamentos/": {
       "get": {
         "tags": [
           "Pagamentos"
         ],
         "description": "Retorna lista de pagamentos",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Retorna lista de pagamentos",
@@ -1215,6 +1302,11 @@
         ],
         "description": "Registra um pagamento",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "obj",
             "in": "body",
@@ -1301,6 +1393,11 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
@@ -1366,6 +1463,11 @@
             "name": "id",
             "in": "path",
             "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
             "type": "string"
           },
           {
@@ -1457,6 +1559,11 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
@@ -1507,6 +1614,13 @@
           "Pedidos"
         ],
         "description": "Retorna lista de pedidos",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Retorna lista de pedidos",
@@ -1581,6 +1695,11 @@
         ],
         "description": "Registra um pedido",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "obj",
             "in": "body",
@@ -1682,6 +1801,11 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
@@ -1759,6 +1883,11 @@
             "name": "id",
             "in": "path",
             "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
             "type": "string"
           },
           {
@@ -1865,6 +1994,11 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
@@ -1915,6 +2049,13 @@
           "Produtos"
         ],
         "description": "Retorna lista de produtos",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Retorna lista de produtos",
@@ -1989,6 +2130,11 @@
         ],
         "description": "Registra um produto",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "obj",
             "in": "body",
@@ -2090,6 +2236,11 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
@@ -2167,6 +2318,11 @@
             "name": "id",
             "in": "path",
             "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
             "type": "string"
           },
           {
@@ -2273,6 +2429,11 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
@@ -2284,6 +2445,84 @@
                 "mensagem": {
                   "type": "string",
                   "example": "Registro deletado com sucesso."
+                },
+                "tipo": {
+                  "type": "string",
+                  "example": "success"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "422": {
+            "description": "Erro interno",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tipo": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "mensagem": {
+                  "type": "string",
+                  "example": "mensagem do sistema"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/produtos/imagem": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/produtos/imagem/{id}": {
+      "delete": {
+        "tags": [
+          "Produto Imagem"
+        ],
+        "description": "Deleta uma imagem de produto",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Imagem deletada",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type": "string",
+                  "example": "Imagem deletada com sucesso."
                 },
                 "tipo": {
                   "type": "string",

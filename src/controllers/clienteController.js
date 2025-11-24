@@ -1,5 +1,6 @@
 import { prisma } from "../utils/index.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 async function buscarTodos() {
     try {
@@ -90,6 +91,13 @@ async function deletar(id) {
             }
         }
     } catch (error) {
+        if (error.code === "P2003") {
+            return {
+                tipo: "error",
+                mensagem:
+                    "Não é possível excluir este registro, pois está sendo utilizado.",
+            };
+        }
         return {
             tipo: "error",
             mensagem: error.message
@@ -106,7 +114,17 @@ async function login(dados) {
         })
         if (clienteExiste) {
             let senhaEValida = await bcrypt.compare(dados.senha, clienteExiste.senha);
-            return senhaEValida;
+            if(senhaEValida){
+                let token = jwt.sign({usuario: clienteExiste}, process.env.JWT, {expiresIn: "1h"});
+                return {
+                    usuario: clienteExiste,
+                    token
+                };
+            }
+            return {
+            tipo: "warning",
+            mensagem: "email ou senha inválido"
+        }
         }
         return {
             tipo: "warning",

@@ -20,7 +20,28 @@ async function buscarTodos() {
     } catch (error) {
         return {
             tipo: "error",
-            mensagem:error.message
+            mensagem: error.message
+        }
+    }
+}
+
+async function pesquisa(palavra) {
+    try {
+        return await prisma.produto.findMany({
+            include: {
+                produto_imagem: true,
+                categoria: true
+            },
+            where: {
+                nome: {
+                    contains: palavra,
+                }
+            }
+        })
+    } catch (error) {
+        return {
+            tipo: "error",
+            mensagem: error.message
         }
     }
 }
@@ -28,20 +49,21 @@ async function buscarTodos() {
 async function buscarUm(id) {
     try {
         let req = await prisma.produto.findFirst({
-            where:{
+            where: {
                 id: Number(id)
             }
         })
-        if(req){
+        if (!req) {
             return {
                 tipo: "error",
                 mensagem: "Registro não encontrado."
             }
         }
+        return req;
     } catch (error) {
         return {
             tipo: "error",
-            mensagem:error.message
+            mensagem: error.message
         }
     }
 }
@@ -51,7 +73,7 @@ async function criar(dados) {
         let req = await prisma.produto.create({
             data: dados
         })
-        if(req){
+        if (req) {
             return {
                 tipo: "success",
                 mensagem: "Registro criado com sucesso!"
@@ -60,7 +82,7 @@ async function criar(dados) {
     } catch (error) {
         return {
             tipo: "error",
-            mensagem:error.message
+            mensagem: error.message
         }
     }
 }
@@ -68,12 +90,12 @@ async function criar(dados) {
 async function editar(dados, id) {
     try {
         let req = await prisma.produto.update({
-            where:{
+            where: {
                 id: Number(id)
             },
             data: dados
         })
-        if(req){
+        if (req) {
             return {
                 tipo: "success",
                 mensagem: "Registro editado com sucesso!"
@@ -82,7 +104,7 @@ async function editar(dados, id) {
     } catch (error) {
         return {
             tipo: "error",
-            mensagem:error.message
+            mensagem: error.message
         }
     }
 }
@@ -90,20 +112,27 @@ async function editar(dados, id) {
 async function deletar(id) {
     try {
         let req = await prisma.produto.delete({
-            where:{
+            where: {
                 id: Number(id)
             }
         })
-        if(req){
+        if (req) {
             return {
                 tipo: "success",
                 mensagem: "Registro deletado com sucesso!"
             }
         }
     } catch (error) {
+        if (error.code === "P2003") {
+            return {
+                tipo: "error",
+                mensagem:
+                    "Não é possível excluir este registro, pois está sendo utilizado.",
+            };
+        }
         return {
             tipo: "error",
-            mensagem:error.message
+            mensagem: error.message
         }
     }
 }
@@ -126,6 +155,7 @@ async function criarImagem(req) {
                         tipo: "warning",
                         mensagem: 'O arquivo é obrigatório'
                     });
+                    return;
                 }
 
                 const filenameOriginal = files.imagem[0].originalFilename;
@@ -162,7 +192,7 @@ async function criarImagem(req) {
     } catch (error) {
         return {
             tipo: "error",
-            mensagem:error.message
+            mensagem: error.message
         }
     }
 }
@@ -173,7 +203,7 @@ async function buscarTodasImagens() {
     } catch (error) {
         return {
             tipo: "error",
-            mensagem:error.message
+            mensagem: error.message
         }
     }
 }
@@ -183,7 +213,7 @@ async function deletarImagem(id) {
         const imagem = await prisma.produto_imagem.findFirst({
             where: { id: Number(id) }
         });
-        if(!imagem) {
+        if (!imagem) {
             return {
                 tipo: "error",
                 mensagem: "Imagem não encontrada."
@@ -196,7 +226,7 @@ async function deletarImagem(id) {
 
         const filePath = path.join(process.cwd(), "uploads/produtos", imagem.imagem);
 
-        if(fs.existsSync(filePath)) {
+        if (fs.existsSync(filePath)) {
             fs.unlinkSync(filePath);
         }
         return {
@@ -204,6 +234,13 @@ async function deletarImagem(id) {
             mensagem: "Imagem deletada com sucesso."
         };
     } catch (error) {
+        if (error.code === "P2003") {
+            return {
+                tipo: "error",
+                mensagem:
+                    "Não é possível excluir este registro, pois está sendo utilizado.",
+            };
+        }
         return {
             tipo: "error",
             mensagem: error.message
@@ -219,5 +256,6 @@ export {
     deletar,
     criarImagem,
     buscarTodasImagens,
-    deletarImagem
+    deletarImagem,
+    pesquisa
 }

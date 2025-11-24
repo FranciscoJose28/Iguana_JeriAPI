@@ -74,7 +74,7 @@ model produto {
   descricao       String            @db.VarChar(255)
   tamanho         String            @db.VarChar(255)
   cor             String            @db.VarChar(255)
-  valor           String            @db.VarChar(255)
+  valor           Float            
   estoque         String            @db.VarChar(255)
   id_categoria    Int
   desconto        Int?

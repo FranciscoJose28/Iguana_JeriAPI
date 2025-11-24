@@ -87,6 +87,13 @@ async function deletar(id) {
             }
         }
     } catch (error) {
+        if (error.code === "P2003") {
+            return {
+                tipo: "error",
+                mensagem:
+                    "Não é possível excluir este registro, pois está sendo utilizado.",
+            };
+        }
         return {
             tipo: "error",
             mensagem:error.message
