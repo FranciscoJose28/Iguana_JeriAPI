@@ -110,6 +110,9 @@ async function login(dados) {
         let clienteExiste = await prisma.cliente.findFirst({
             where: {
                 email: dados.email
+            },
+            include:{
+                niveis:true
             }
         })
         if (clienteExiste) {

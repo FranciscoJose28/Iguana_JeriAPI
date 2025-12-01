@@ -23,8 +23,12 @@ model cliente {
   telefone        String      @db.VarChar(255)
   cpf             String      @db.VarChar(255)
   data_nascimento String      @db.VarChar(255)
+  nivel_id        Int?
+  niveis          niveis?     @relation(fields: [nivel_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "usuario_niveis_fk")
   enderecos       enderecos[]
   pedido          pedido[]
+
+  @@index([nivel_id], map: "usuario_niveis_fk")
 }
 
 model enderecos {
@@ -74,7 +78,7 @@ model produto {
   descricao       String            @db.VarChar(255)
   tamanho         String            @db.VarChar(255)
   cor             String            @db.VarChar(255)
-  valor           Float            
+  valor           Float
   estoque         String            @db.VarChar(255)
   id_categoria    Int
   desconto        Int?
@@ -103,4 +107,10 @@ model produtos_pedido {
 
   @@index([id_produto], map: "produtos_pedido_fk1")
   @@index([id_pedido], map: "produtos_pedido_fk2")
+}
+
+model niveis {
+  id      Int       @id @default(autoincrement())
+  nome    String    @db.VarChar(20)
+  cliente cliente[]
 }
