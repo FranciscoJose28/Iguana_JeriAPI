@@ -23,3 +23,4 @@ export function rotaProtegida(req, res, next){
         })
     }
 }
+

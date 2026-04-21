@@ -1,5 +1,5 @@
 import {Router} from "express"
-import { buscarTodos, buscarUm, criar, deletar, editar, criarImagem, buscarTodasImagens, pesquisa } from "../controllers/produtoController.js"
+import { buscarTodos, buscarUm, criar, deletar, editar, criarImagem, buscarTodasImagens, pesquisa, deletarImagem } from "../controllers/produtoController.js"
 import { rotaProtegida } from "../utils/index.js"
 
 export const produtoRoutes = Router()

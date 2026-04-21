@@ -79,6 +79,7 @@ model produto {
   tamanho         String            @db.VarChar(255)
   cor             String            @db.VarChar(255)
   valor           Float
+  peso            Float?
   estoque         String            @db.VarChar(255)
   id_categoria    Int
   desconto        Int?

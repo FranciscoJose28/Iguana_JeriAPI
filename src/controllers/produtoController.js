@@ -51,6 +51,10 @@ async function buscarUm(id) {
         let req = await prisma.produto.findFirst({
             where: {
                 id: Number(id)
+            },
+            include:{
+                produto_imagem: true,
+                categoria:true
             }
         })
         if (!req) {
@@ -70,6 +74,7 @@ async function buscarUm(id) {
 
 async function criar(dados) {
     try {
+        dados.peso = Number(dados.peso) 
         let req = await prisma.produto.create({
             data: dados
         })
@@ -89,6 +94,7 @@ async function criar(dados) {
 
 async function editar(dados, id) {
     try {
+        dados.peso = Number(dados.peso)
         let req = await prisma.produto.update({
             where: {
                 id: Number(id)
@@ -160,10 +166,10 @@ async function criarImagem(req) {
 
                 const filenameOriginal = files.imagem[0].originalFilename;
 
-                if (!filenameOriginal.includes("png") && !filenameOriginal.includes("jpg")) {
+                if (!filenameOriginal.includes("png") && !filenameOriginal.includes("jpg") && !filenameOriginal.includes("webp")) {
                     resolve({
                         tipo: "warning",
-                        mensagem: 'O arquivo precisa ser do tipo PNG ou JPG'
+                        mensagem: 'O arquivo precisa ser do tipo PNG, JPG ou WEBP'
                     });
                 }
 
