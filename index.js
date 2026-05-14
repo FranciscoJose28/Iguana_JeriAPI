@@ -3,6 +3,7 @@ import cors from "cors"
 import { categoriaRoutes } from "./src/routes/categoriaRoutes.js"
 import { clienteRoutes } from "./src/routes/clienteRoutes.js"
 import { enderecosRoutes } from "./src/routes/enderecosRoutes.js"
+import { favoritosRoutes } from "./src/routes/favoritosRoutes.js"
 import { pagamentoRoutes } from "./src/routes/pagamentoRoutes.js"
 import { pedidoRoutes } from "./src/routes/pedidoRoutes.js"
 import { produtoRoutes } from "./src/routes/produtoRoutes.js"
@@ -66,6 +67,8 @@ app.use("/categorias", categoriaRoutes); //rotaProtegida,
 app.use("/clientes", clienteRoutes);
 
 app.use("/enderecos", enderecosRoutes); //rotaProtegida,
+
+app.use("/favoritos", favoritosRoutes); //rotaProtegida,
 
 app.use("/pagamentos", pagamentoRoutes); //rotaProtegida,
 

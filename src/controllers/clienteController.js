@@ -4,7 +4,19 @@ import jwt from "jsonwebtoken";
 
 async function buscarTodos() {
     try {
-        return await prisma.cliente.findMany()
+        return await prisma.cliente.findMany({
+            include: {
+                favoritos: {
+                    include: {
+                        produto: {
+                            include: {
+                                produto_imagem: true
+                            }
+                        }
+                    }
+                }
+            }
+        })
     } catch (error) {
         return {
             tipo: "error",
@@ -18,6 +30,17 @@ async function buscarUm(id) {
         let req = await prisma.cliente.findFirst({
             where: {
                 id: Number(id)
+            },
+            include: {
+                favoritos: {
+                    include: {
+                        produto: {
+                            include: {
+                                produto_imagem: true
+                            }
+                        }
+                    }
+                }
             }
         })
         if (req) {

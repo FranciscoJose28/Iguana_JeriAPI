@@ -10,7 +10,7 @@ export function rotaProtegida(req, res, next){
             if(error){
                 res.json({
                     tipo: "warning",
-                    mensagem: "Token é necessário"
+                    mensagem: "Token inválido: " + error
                 })
             } else{
                 next();
