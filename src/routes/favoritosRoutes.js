@@ -4,7 +4,7 @@ import { rotaProtegida } from "../utils/index.js"
 
 export const favoritosRoutes = Router()
 
-favoritosRoutes.get("/", async (req, res) => {
+favoritosRoutes.get("/:id", async (req, res) => {
     // #swagger.tags = ['Endereços']
     // #swagger.description = 'Retorna lista de endereços'
     /* #swagger.responses[200] = {
@@ -25,7 +25,7 @@ favoritosRoutes.get("/", async (req, res) => {
                 mensagem: 'mensagem do sistema'
             }
     } */
-    res.json(await buscarTodos())
+    res.json(await buscarTodos(req.params.id))
 })
 
 favoritosRoutes.post("/", rotaProtegida, async (req, res) => {

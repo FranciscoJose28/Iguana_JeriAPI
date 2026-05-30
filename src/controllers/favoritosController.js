@@ -3,13 +3,27 @@ import { prisma } from "../utils/index.js";
 async function criar(dados) {
     try {
         delete dados.token;
-        let req = await prisma.favoritos.create({
-            data: dados
-        })
-        if (req) {
+        let favorito = await prisma.favoritos.findFirst({
+            where: {
+                id_cliente: Number(dados.id_cliente),
+                id_produto: Number(dados.id_produto)
+            }
+        });
+        if (favorito) {
+            await deletar(favorito.id)
             return {
-                tipo: "success",
-                mensagem: "Favorito criado com sucesso!"
+                    tipo: "success",
+                    mensagem: "Item removido!"
+                }
+        } else {
+            let req = await prisma.favoritos.create({
+                data: dados
+            })
+            if (req) {
+                return {
+                    tipo: "success",
+                    mensagem: "Favorito criado com sucesso!"
+                }
             }
         }
     } catch (error) {
@@ -20,9 +34,20 @@ async function criar(dados) {
     }
 }
 
-async function buscarTodos() {
+async function buscarTodos(id) {
     try {
-        return await prisma.favoritos.findMany()
+        return await prisma.favoritos.findMany({
+            where: {
+                id_cliente: Number(id)
+            },
+            include: {
+                produto: {
+                    include: {
+                        produto_imagem: true
+                    }
+                }
+            }
+        })
     } catch (error) {
         return {
             tipo: "error",

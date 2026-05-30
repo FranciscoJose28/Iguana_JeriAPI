@@ -18,7 +18,7 @@ model categoria {
 model cliente {
   id              Int         @id @unique(map: "id") @default(autoincrement())
   nome            String      @db.VarChar(255)
-  sobrenome       String?      @db.VarChar(255)
+  sobrenome       String?     @db.VarChar(255)
   email           String      @db.VarChar(255)
   senha           String      @db.VarChar(255)
   telefone        String      @db.VarChar(255)
