@@ -1,5 +1,6 @@
 import express from "express"
 import cors from "cors"
+import { bannerRoutes } from "./src/routes/bannerRoutes.js"
 import { categoriaRoutes } from "./src/routes/categoriaRoutes.js"
 import { clienteRoutes } from "./src/routes/clienteRoutes.js"
 import { enderecosRoutes } from "./src/routes/enderecosRoutes.js"
@@ -75,6 +76,10 @@ app.use("/pagamentos", pagamentoRoutes); //rotaProtegida,
 app.use("/pedidos", pedidoRoutes); //rotaProtegida,
 
 app.use("/produtos", produtoRoutes);
+
+app.use("/banners", bannerRoutes);
+
+app.use('/uploads/banners', express.static('./src/uploads/banners'));
 
 app.use('/uploads/produtos', express.static('./src/uploads/produtos'));
 

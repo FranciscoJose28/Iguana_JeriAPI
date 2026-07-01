@@ -102,6 +102,12 @@ model produto_imagem {
   @@index([id_produto], map: "produto_imagem_fk2")
 }
 
+model banners {
+  id         Int     @id @unique(map: "id") @default(autoincrement())
+  imagem     String  @db.Text
+  link       String  @db.Text
+}
+
 model favoritos {
   id         Int     @id @unique(map: "id") @default(autoincrement())
   id_cliente Int
