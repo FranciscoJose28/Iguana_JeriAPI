@@ -85,7 +85,7 @@ async function editar(req) {
                         id: Number(req.params.id)
                     },
                     data: {
-                        link: req.body.link,
+                        link: fields.link[0],
                         imagem: `${req.protocol}://${req.headers.host}/uploads/banners/${newFilename}`
                     }
                 });

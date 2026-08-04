@@ -46,15 +46,17 @@ model enderecos {
 }
 
 model pagamento {
-  id             Int    @id @unique(map: "id") @default(autoincrement())
-  metodo         String @db.VarChar(255)
-  status         String @db.VarChar(255)
-  data_pagamento String @db.VarChar(255)
-  valor          Float  @db.Float
-  id_pedido      Int
-  pedido         pedido @relation(fields: [id_pedido], references: [id], onUpdate: Restrict, map: "pagamento_fk5")
+  id                Int      @id @default(autoincrement())
+  id_mercado_pago   String?  @db.VarChar(100)
+  metodo            String   @db.VarChar(255)
+  status            String   @db.VarChar(255)
+  data_pagamento    String   @db.VarChar(255)
+  valor             Float
+  id_pedido         Int
 
-  @@index([id_pedido], map: "pagamento_fk5")
+  pedido pedido @relation(fields: [id_pedido], references: [id])
+
+  @@index([id_pedido])
 }
 
 model pedido {

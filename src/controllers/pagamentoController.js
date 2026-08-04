@@ -1,4 +1,8 @@
 import { prisma } from "../utils/index.js";
+import { MercadoPagoConfig, Payment, Preference } from "mercadopago";
+const client = new MercadoPagoConfig({
+    accessToken: "TEST-5187935436662042-032319-8f331312da329d0eb3da0ce801349c3d-586090033",
+});
 
 async function buscarTodos() {
     try {
@@ -6,7 +10,7 @@ async function buscarTodos() {
     } catch (error) {
         return {
             tipo: "error",
-            mensagem:error.message
+            mensagem: error.message
         }
     }
 }
@@ -14,11 +18,11 @@ async function buscarTodos() {
 async function buscarUm(id) {
     try {
         let req = await prisma.pagamento.findFirst({
-            where:{
+            where: {
                 id: Number(id)
             }
         })
-        if(req){
+        if (req) {
             return {
                 tipo: "error",
                 mensagem: "Registro não encontrado."
@@ -27,39 +31,56 @@ async function buscarUm(id) {
     } catch (error) {
         return {
             tipo: "error",
-            mensagem:error.message
+            mensagem: error.message
         }
     }
 }
 
 async function criar(dados) {
     try {
-        let req = await prisma.pagamento.create({
-            data: dados
-        })
-        if(req){
-            return {
-                tipo: "success",
-                mensagem: "Registro criado com sucesso!"
+        const payment = new Payment(client);
+        const formData = dados?.formData ?? dados?.body ?? dados;
+        console.log(formData);
+
+        const pagamentoMP = await payment.create({
+            body: formData
+        });
+
+        await prisma.pagamento.create({
+            data: {
+                metodo: pagamentoMP.payment_method_id,
+                status: pagamentoMP.status,
+                data_pagamento: new Date().toISOString(),
+                valor: pagamentoMP.transaction_amount,
+                id_pedido: dados?.id_pedido ?? formData?.id_pedido,
+                id_mercado_pago: pagamentoMP.id.toString()
             }
-        }
+        });
+
+        return {
+            tipo: "success",
+            pagamento: pagamentoMP
+        };
+
     } catch (error) {
+
         return {
             tipo: "error",
-            mensagem:error.message
-        }
+            mensagem: error.message
+        };
+
     }
 }
 
 async function editar(dados, id) {
     try {
         let req = await prisma.pagamento.update({
-            where:{
+            where: {
                 id: Number(id)
             },
             data: dados
         })
-        if(req){
+        if (req) {
             return {
                 tipo: "success",
                 mensagem: "Registro editado com sucesso!"
@@ -68,7 +89,7 @@ async function editar(dados, id) {
     } catch (error) {
         return {
             tipo: "error",
-            mensagem:error.message
+            mensagem: error.message
         }
     }
 }
@@ -76,11 +97,11 @@ async function editar(dados, id) {
 async function deletar(id) {
     try {
         let req = await prisma.pagamento.delete({
-            where:{
+            where: {
                 id: Number(id)
             }
         })
-        if(req){
+        if (req) {
             return {
                 tipo: "success",
                 mensagem: "Registro deletado com sucesso!"
@@ -96,7 +117,7 @@ async function deletar(id) {
         }
         return {
             tipo: "error",
-            mensagem:error.message
+            mensagem: error.message
         }
     }
 }

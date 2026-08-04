@@ -1,5 +1,5 @@
 import {Router} from "express"
-import { buscarTodos, buscarUm, criar, deletar, editar, criarImagem, buscarTodasImagens, pesquisa, deletarImagem } from "../controllers/produtoController.js"
+import { buscarTodos, buscarUm, criar, deletar, editar, criarImagem, buscarTodasImagens, pesquisa, deletarImagem, criarPreferencia } from "../controllers/produtoController.js"
 import { rotaProtegida } from "../utils/index.js"
 
 export const produtoRoutes = Router()
@@ -27,7 +27,8 @@ produtoRoutes.get("/", async (req, res) => {
                 mensagem: 'mensagem do sistema'
             }
     } */
-    res.json(await buscarTodos())
+    const { cat, ordenacao } = req.query;
+    res.json(await buscarTodos(cat, ordenacao))
 })
 
 // produtoRoutes.get("/imagem", async (req, res) => {
@@ -197,3 +198,7 @@ produtoRoutes.delete("/imagem/:id", rotaProtegida, async (req, res) => {
     } */
    res.json(await deletarImagem(req.params.id));
 });
+
+produtoRoutes.post("/preferencia", async (req, res) => {
+    res.json(await criarPreferencia(req.body))
+})

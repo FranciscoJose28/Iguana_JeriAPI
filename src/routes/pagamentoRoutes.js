@@ -75,7 +75,7 @@ pagamentoRoutes.post("/", async (req, res) => {
                 mensagem: 'mensagem do sistema'
             }
     } */
-    res.json(await criar(req.body))
+    res.json(await criar(req))
 })
 
 pagamentoRoutes.put("/:id", async (req, res) => {

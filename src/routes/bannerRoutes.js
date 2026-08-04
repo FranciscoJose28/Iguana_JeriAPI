@@ -47,38 +47,6 @@ bannerRoutes.get("/:id", async (req, res) => {
     res.json(await buscarUm(req.params.id))
 })
 
-bannerRoutes.post("/", rotaProtegida, async (req, res) => {
-    // #swagger.tags = ['Banners']
-    // #swagger.description = 'Registra um banner'
-    /* #swagger.parameters['imagem'] = {
-            in: 'formData',
-            type: 'file',
-            required: true,
-            description: 'Arquivo da imagem do banner'
-    } */
-    /* #swagger.parameters['link'] = {
-            in: 'formData',
-            type: 'string',
-            required: true,
-            description: 'Link de destino do banner'
-    } */
-    /* #swagger.responses[200] = {
-            description: 'Registro criado',
-            schema: {
-                mensagem: 'Registro criado com sucesso',
-                tipo: 'success'
-            }
-    } */
-    /* #swagger.responses[422] = {
-            description: 'Erro interno',
-            schema: {
-                tipo: "error",
-                mensagem: 'mensagem do sistema'
-            }
-    } */
-    res.json(await criar(req))
-})
-
 bannerRoutes.post("/:id", rotaProtegida, async (req, res) => {
     // #swagger.tags = ['Banners']
     // #swagger.description = 'Atualiza um banner'
@@ -109,6 +77,38 @@ bannerRoutes.post("/:id", rotaProtegida, async (req, res) => {
             }
     } */
     res.json(await editar(req))
+})
+
+bannerRoutes.post("/", rotaProtegida, async (req, res) => {
+    // #swagger.tags = ['Banners']
+    // #swagger.description = 'Registra um banner'
+    /* #swagger.parameters['imagem'] = {
+            in: 'formData',
+            type: 'file',
+            required: true,
+            description: 'Arquivo da imagem do banner'
+    } */
+    /* #swagger.parameters['link'] = {
+            in: 'formData',
+            type: 'string',
+            required: true,
+            description: 'Link de destino do banner'
+    } */
+    /* #swagger.responses[200] = {
+            description: 'Registro criado',
+            schema: {
+                mensagem: 'Registro criado com sucesso',
+                tipo: 'success'
+            }
+    } */
+    /* #swagger.responses[422] = {
+            description: 'Erro interno',
+            schema: {
+                tipo: "error",
+                mensagem: 'mensagem do sistema'
+            }
+    } */
+    res.json(await criar(req))
 })
 
 bannerRoutes.delete("/:id", rotaProtegida, async (req, res) => {
