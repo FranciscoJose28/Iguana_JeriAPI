@@ -26,7 +26,7 @@ pedidoRoutes.get("/", async (req, res) => {
                 mensagem: 'mensagem do sistema'
             }
     } */
-    res.json(await buscarTodos())
+    res.json(await buscarTodos(req.query.id_cliente))
 })
 
 pedidoRoutes.get("/:id", async (req, res) => {

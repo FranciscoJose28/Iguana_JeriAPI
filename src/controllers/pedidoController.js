@@ -1,8 +1,14 @@
 import { prisma } from "../utils/index.js";
 
-async function buscarTodos() {
+async function buscarTodos(id_cliente) {
     try {
-        return await prisma.pedido.findMany()
+        const where = {}
+
+        if (id_cliente !== undefined && id_cliente !== null && id_cliente !== "") {
+            where.id_cliente = Number(id_cliente)
+        }
+
+        return await prisma.pedido.findMany({ where })
     } catch (error) {
         return {
             tipo: "error",
