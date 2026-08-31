@@ -42,22 +42,33 @@ async function criar(dados) {
     try {
         const payment = new Payment(client);
         const formData = dados?.formData ?? dados?.body ?? dados;
-        const usuario = await prisma.cliente.create({
-            data:{
-                nome: formData.nome,
-                sobrenome: formData.sobrenome,
-                email: formData.email,
-                cpf: formData.cpf,
-                telefone: formData.telefone,
-                data_nascimento: formData.nascimento,
-                senha: await bcrypt.hash(formData.senha, 10)
-            }
-        })
-        console.log(usuario);
-        
+
+        let usuario;
+
+        if (formData.usuario_id) {
+            usuario = await prisma.cliente.findFirst({
+                where: {
+                    id: Number(formData.usuario_id)
+                }
+            })
+        }
 
         if (!usuario) {
-            return{
+            usuario = await prisma.cliente.create({
+                data: {
+                    nome: formData.nome,
+                    sobrenome: formData.sobrenome,
+                    email: formData.email,
+                    cpf: formData.cpf,
+                    telefone: formData.telefone,
+                    data_nascimento: formData.nascimento,
+                    senha: await bcrypt.hash(formData.senha, 10)
+                }
+            })
+        }
+
+        if (!usuario) {
+            return {
                 tipo: "error",
                 mensagem: "Erro ao criar usuário"
             }
@@ -67,14 +78,29 @@ async function criar(dados) {
             data: {
                 data_pedido: new Date(),
                 status: formData?.status ?? "pendente",
-                valor: Number(formData?.valor ?? formData?.transaction_amount ?? dados?.valor ?? 0),
+                valor_produto: Number(formData?.valor ?? formData?.transaction_amount ?? dados?.valor ?? 0) - formData?.valor_frete,
                 id_cliente: Number(usuario.id),
                 transportadora: String(formData?.transportadora ?? dados?.transportadora ?? ""),
-                data_envio: new Date(formData?.data_envio ?? Date.now()),
-                data_entrega: new Date(formData?.data_entrega ?? Date.now()),
+                dias: formData?.dias ?? 0,
+                valor_frete: formData?.valor_frete ?? 0,
                 desconto: Number(formData?.desconto ?? dados?.desconto ?? 0)
             }
         });
+
+        if (Array.isArray(formData.produtos)) {
+            for (const produto of formData.produtos) {
+                const idProduto = Number(produto?.id_produto ?? produto?.id ?? produto)
+
+                if (!Number.isNaN(idProduto) && idProduto > 0) {
+                    await prisma.produtos_pedido.create({
+                        data: {
+                            id_pedido: pedido.id,
+                            id_produto: idProduto
+                        }
+                    })
+                }
+            }
+        }
 
         const paymentBody = {
             transaction_amount: Number(formData?.transaction_amount ?? formData?.valor ?? 0),

@@ -8,7 +8,17 @@ async function buscarTodos(id_cliente) {
             where.id_cliente = Number(id_cliente)
         }
 
-        return await prisma.pedido.findMany({ where })
+        return await prisma.pedido.findMany({ where, 
+            include: {
+                produtos_pedido: {
+                    include: {
+                        produto: {
+                            include: {produto_imagem: true}
+                        }
+                    }
+                }
+            }
+         })
     } catch (error) {
         return {
             tipo: "error",

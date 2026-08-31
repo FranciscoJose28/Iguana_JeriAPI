@@ -15,12 +15,16 @@ const __dirname = path.dirname(__filename);
 const copyFileAsync = promisify(fs.copyFile);
 const unlinkAsync = promisify(fs.unlink);
 
-async function buscarTodos(cat, ordenacao) {
+async function buscarTodos(cat, ordenacao, novidade) {
     try {
         let where = {};
         if (cat) {
             const categorias = cat.split(',').map(c => c.trim());
             where = { categoria: { nome: { in: categorias } } };
+        }
+
+        if (novidade === 'true' || novidade === true) {
+            where.novidades = true;
         }
 
         if (ordenacao === 'mais-vendido') {

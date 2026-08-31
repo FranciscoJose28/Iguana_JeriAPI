@@ -19,7 +19,7 @@ model cliente {
   id              Int         @id @unique(map: "id") @default(autoincrement())
   nome            String      @db.VarChar(255)
   sobrenome       String?     @db.VarChar(255)
-  email           String      @db.VarChar(255) @unique
+  email           String      @unique @db.VarChar(255)
   senha           String      @db.VarChar(255)
   telefone        String      @db.VarChar(255)
   cpf             String      @db.VarChar(255)
@@ -46,13 +46,13 @@ model enderecos {
 }
 
 model pagamento {
-  id                Int      @id @default(autoincrement())
-  id_mercado_pago   String?  @db.VarChar(100)
-  metodo            String   @db.VarChar(255)
-  status            String   @db.VarChar(255)
-  data_pagamento    String   @db.VarChar(255)
-  valor             Float
-  id_pedido         Int
+  id              Int     @id @default(autoincrement())
+  id_mercado_pago String? @db.VarChar(100)
+  metodo          String  @db.VarChar(255)
+  status          String  @db.VarChar(255)
+  data_pagamento  String  @db.VarChar(255)
+  valor           Float
+  id_pedido       Int
 
   pedido pedido @relation(fields: [id_pedido], references: [id])
 
@@ -63,11 +63,14 @@ model pedido {
   id              Int               @id @unique(map: "id") @default(autoincrement())
   data_pedido     DateTime          @db.DateTime(0)
   status          String            @db.VarChar(255)
-  valor           Float             @db.Float
+  valor_produto   Float             @default(0) @db.Float
+  valor_frete     Float             @default(0) @db.Float
   id_cliente      Int
+  dias            Int               @default(0)
   transportadora  String            @db.VarChar(255)
-  data_envio      DateTime          @db.DateTime(0)
-  data_entrega    DateTime          @db.DateTime(0)
+  codigo_rastreio String?           @db.VarChar(255)
+  data_envio      DateTime?         @db.DateTime(0)
+  data_entrega    DateTime?         @db.DateTime(0)
   desconto        Int?
   pagamento       pagamento[]
   cliente         cliente           @relation(fields: [id_cliente], references: [id], onUpdate: Restrict, map: "pedido_fk4")
@@ -87,6 +90,7 @@ model produto {
   estoque         String            @db.VarChar(255)
   id_categoria    Int
   desconto        Int?
+  novidades       Boolean?          @default(false)
   categoria       categoria         @relation(fields: [id_categoria], references: [id], onUpdate: Restrict, map: "produto_fk7")
   produto_imagem  produto_imagem[]
   produtos_pedido produtos_pedido[]
@@ -105,9 +109,9 @@ model produto_imagem {
 }
 
 model banners {
-  id         Int     @id @unique(map: "id") @default(autoincrement())
-  imagem     String  @db.Text
-  link       String  @db.Text
+  id     Int    @id @unique(map: "id") @default(autoincrement())
+  imagem String @db.Text
+  link   String @db.Text
 }
 
 model favoritos {
@@ -125,6 +129,7 @@ model produtos_pedido {
   id         Int     @id @unique(map: "id") @default(autoincrement())
   id_produto Int
   id_pedido  Int
+  quantidade Int     @default(0)
   produto    produto @relation(fields: [id_produto], references: [id], onUpdate: Restrict, map: "produtos_pedido_fk1")
   pedido     pedido  @relation(fields: [id_pedido], references: [id], onUpdate: Restrict, map: "produtos_pedido_fk2")
 

@@ -27,8 +27,8 @@ produtoRoutes.get("/", async (req, res) => {
                 mensagem: 'mensagem do sistema'
             }
     } */
-    const { cat, ordenacao } = req.query;
-    res.json(await buscarTodos(cat, ordenacao))
+    const { cat, ordenacao, novidade } = req.query;
+    res.json(await buscarTodos(cat, ordenacao, novidade))
 })
 
 // produtoRoutes.get("/imagem", async (req, res) => {
