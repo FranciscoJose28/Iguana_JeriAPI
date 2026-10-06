@@ -1,0 +1,4 @@
+ALTER TABLE `enderecos`
+    ADD COLUMN `cep` VARCHAR(255) NULL,
+    ADD COLUMN `numero` VARCHAR(255) NULL,
+    ADD COLUMN `complemento` VARCHAR(255) NULL;

@@ -70,6 +70,12 @@ async function criar(dados) {
                 mensagem: "Registro criado com sucesso!"
             }
         }
+
+        return {
+                tipo: "warning",
+                mensagem: "Falha ao criar."
+            }
+
     } catch (error) {
         return {
             tipo: "error",

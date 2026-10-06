@@ -53,11 +53,28 @@ async function criar(dados) {
 
 async function editar(dados, id) {
     try {
+        let endereco = await prisma.enderecos.count({
+            where: {
+                id_cliente: Number(id)
+            }
+        })
+        if (endereco == 0) {
+            await criar(dados)
+            return;
+        }
         let req = await prisma.enderecos.update({
             where:{
-                id: Number(id)
+                id_cliente: Number(id)
             },
-            data: dados
+            data: {
+                cep: dados.cep,
+                logradouro: dados.logradouro,
+                numero: dados.numero,
+                complemento: dados.complemento,
+                bairro: dados.bairro,
+                cidade: dados.cidade,
+                estado: dados.estado
+            }
         })
         if(req){
             return {

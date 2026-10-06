@@ -1,15 +1,31 @@
 import { prisma } from "../utils/index.js";
 
-async function buscarTodos(id_cliente) {
+async function buscarTodos(id_cliente, status) {
     try {
         const where = {}
 
         if (id_cliente !== undefined && id_cliente !== null && id_cliente !== "") {
             where.id_cliente = Number(id_cliente)
         }
+        const statusList = (Array.isArray(status)
+            ? status.flatMap(value => String(value).split(","))
+            : typeof status === "string"
+                ? status.split(",")
+                : [])
+            .map(value => value.trim())
+            .filter(Boolean)
+
+        if (statusList.length > 0) {
+            where.status = { in: statusList }
+        }
 
         return await prisma.pedido.findMany({ where, 
             include: {
+                cliente: {
+                    include: {
+                        enderecos:true
+                    }
+                },
                 produtos_pedido: {
                     include: {
                         produto: {

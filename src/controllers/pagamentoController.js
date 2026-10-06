@@ -44,6 +44,7 @@ async function criar(dados) {
         const formData = dados?.formData ?? dados?.body ?? dados;
 
         let usuario;
+        let clienteFoiCriado = false;
 
         if (formData.usuario_id) {
             usuario = await prisma.cliente.findFirst({
@@ -65,6 +66,22 @@ async function criar(dados) {
                     senha: await bcrypt.hash(formData.senha, 10)
                 }
             })
+            clienteFoiCriado = true;
+        }
+
+        if (clienteFoiCriado) {
+            await prisma.enderecos.create({
+                data: {
+                    cep: formData.cep,
+                    logradouro: formData.endereco,
+                    numero: formData.numero,
+                    complemento: formData.complemento,
+                    bairro: formData.bairro,
+                    cidade: formData.cidade,
+                    estado: formData.estado,
+                    id_cliente: usuario.id
+                }
+            });
         }
 
         if (!usuario) {
@@ -90,12 +107,22 @@ async function criar(dados) {
         if (Array.isArray(formData.produtos)) {
             for (const produto of formData.produtos) {
                 const idProduto = Number(produto?.id_produto ?? produto?.id ?? produto)
+                const quantidade = Number(produto?.quantidade ?? produto?.quandidade ?? produto?.amount ?? 1)
 
-                if (!Number.isNaN(idProduto) && idProduto > 0) {
+                if (!Number.isNaN(idProduto) && idProduto > 0 && Number.isFinite(quantidade) && quantidade > 0) {
                     await prisma.produtos_pedido.create({
                         data: {
-                            id_pedido: pedido.id,
-                            id_produto: idProduto
+                            quantidade,
+                            pedido: {
+                                connect: {
+                                    id: pedido.id
+                                }
+                            },
+                            produto: {
+                                connect: {
+                                    id: idProduto
+                                }
+                            }
                         }
                     })
                 }
