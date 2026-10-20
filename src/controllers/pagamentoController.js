@@ -39,12 +39,13 @@ async function buscarUm(id) {
 }
 
 async function criar(dados) {
+    let usuario;
+    let clienteFoiCriado = false;
+    let pedidoId;
+
     try {
         const payment = new Payment(client);
         const formData = dados?.formData ?? dados?.body ?? dados;
-
-        let usuario;
-        let clienteFoiCriado = false;
 
         if (formData.usuario_id) {
             usuario = await prisma.cliente.findFirst({
@@ -94,7 +95,7 @@ async function criar(dados) {
         const pedido = await prisma.pedido.create({
             data: {
                 data_pedido: new Date(),
-                status: formData?.status ?? "pendente",
+                status: formData?.status ?? "Pendente",
                 valor_produto: Number(formData?.valor ?? formData?.transaction_amount ?? dados?.valor ?? 0) - formData?.valor_frete,
                 id_cliente: Number(usuario.id),
                 transportadora: String(formData?.transportadora ?? dados?.transportadora ?? ""),
@@ -103,6 +104,7 @@ async function criar(dados) {
                 desconto: Number(formData?.desconto ?? dados?.desconto ?? 0)
             }
         });
+        pedidoId = pedido.id;
 
         if (Array.isArray(formData.produtos)) {
             for (const produto of formData.produtos) {
@@ -169,6 +171,37 @@ async function criar(dados) {
         };
 
     } catch (error) {
+        try {
+            if (pedidoId || (clienteFoiCriado && usuario)) {
+                await prisma.$transaction(async (tx) => {
+                    if (pedidoId) {
+                        await tx.produtos_pedido.deleteMany({
+                            where: { id_pedido: pedidoId }
+                        });
+                        await tx.pagamento.deleteMany({
+                            where: { id_pedido: pedidoId }
+                        });
+                        await tx.pedido.delete({
+                            where: { id: pedidoId }
+                        });
+                    }
+
+                    if (clienteFoiCriado && usuario) {
+                        await tx.enderecos.deleteMany({
+                            where: { id_cliente: usuario.id }
+                        });
+                        await tx.cliente.delete({
+                            where: { id: usuario.id }
+                        });
+                    }
+                });
+            }
+        } catch (rollbackError) {
+            return {
+                tipo: "error",
+                mensagem: `${error.message}. Falha ao desfazer os registros criados: ${rollbackError.message}`
+            };
+        }
 
         return {
             tipo: "error",

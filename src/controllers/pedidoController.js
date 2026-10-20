@@ -1,12 +1,25 @@
 import { prisma } from "../utils/index.js";
 
-async function buscarTodos(id_cliente, status) {
+async function buscarTodos(id_cliente, status, cliente) {
     try {
         const where = {}
 
         if (id_cliente !== undefined && id_cliente !== null && id_cliente !== "") {
             where.id_cliente = Number(id_cliente)
         }
+
+        if (typeof cliente === "string" && cliente.trim() !== "") {
+            const buscaCliente = cliente.trim()
+            where.cliente = {
+                is: {
+                    OR: [
+                        { nome: { contains: buscaCliente } },
+                        { email: { contains: buscaCliente } }
+                    ]
+                }
+            }
+        }
+
         const statusList = (Array.isArray(status)
             ? status.flatMap(value => String(value).split(","))
             : typeof status === "string"
