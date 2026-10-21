@@ -1,22 +1,23 @@
+
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model categoria {
-  id        Int       @id @unique(map: "id") @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   nome      String    @db.VarChar(255)
   descricao String    @db.VarChar(255)
   produto   produto[]
 }
 
 model cliente {
-  id              Int         @id @unique(map: "id") @default(autoincrement())
+  id              Int         @id @default(autoincrement())
   nome            String      @db.VarChar(255)
   sobrenome       String?     @db.VarChar(255)
   email           String      @unique @db.VarChar(255)
@@ -25,16 +26,16 @@ model cliente {
   cpf             String?     @db.VarChar(255)
   data_nascimento String?     @db.VarChar(255)
   nivel_id        Int?
-  niveis          niveis?     @relation(fields: [nivel_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "usuario_niveis_fk")
+  niveis          niveis?     @relation(fields: [nivel_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "cliente_niveis_fk")
   enderecos       enderecos[]
   pedido          pedido[]
   favoritos       favoritos[]
 
-  @@index([nivel_id], map: "usuario_niveis_fk")
+  @@index([nivel_id], map: "cliente_nivel_id_idx")
 }
 
 model enderecos {
-  id          Int     @id @unique(map: "id") @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   cep         String? @db.VarChar(255)
   logradouro  String  @db.VarChar(255)
   numero      String? @db.VarChar(255)
@@ -43,9 +44,9 @@ model enderecos {
   cidade      String  @db.VarChar(255)
   estado      String  @db.VarChar(255)
   id_cliente  Int
-  cliente     cliente @relation(fields: [id_cliente], references: [id], onUpdate: Restrict, map: "enderecos_fk5")
+  cliente     cliente @relation(fields: [id_cliente], references: [id], onUpdate: Restrict, map: "enderecos_cliente_fk")
 
-  @@index([id_cliente], map: "enderecos_fk5")
+  @@index([id_cliente], map: "enderecos_cliente_id_idx")
 }
 
 model pagamento {
@@ -57,33 +58,33 @@ model pagamento {
   valor           Float
   id_pedido       Int
 
-  pedido pedido @relation(fields: [id_pedido], references: [id])
+  pedido pedido @relation(fields: [id_pedido], references: [id], map: "pagamento_pedido_fk")
 
-  @@index([id_pedido])
+  @@index([id_pedido], map: "pagamento_pedido_id_idx")
 }
 
 model pedido {
-  id              Int               @id @unique(map: "id") @default(autoincrement())
-  data_pedido     DateTime          @db.DateTime(0)
+  id              Int               @id @default(autoincrement())
+  data_pedido     DateTime          @db.Timestamp(0)
   status          String            @db.VarChar(255)
-  valor_produto   Float             @default(0) @db.Float
-  valor_frete     Float             @default(0) @db.Float
+  valor_produto   Float             @default(0)
+  valor_frete     Float             @default(0)
   id_cliente      Int
   dias            Int               @default(0)
   transportadora  String            @db.VarChar(255)
   codigo_rastreio String?           @db.VarChar(255)
-  data_envio      DateTime?         @db.DateTime(0)
-  data_entrega    DateTime?         @db.DateTime(0)
+  data_envio      DateTime?         @db.Timestamp(0)
+  data_entrega    DateTime?         @db.Timestamp(0)
   desconto        Int?
   pagamento       pagamento[]
-  cliente         cliente           @relation(fields: [id_cliente], references: [id], onUpdate: Restrict, map: "pedido_fk4")
+  cliente         cliente           @relation(fields: [id_cliente], references: [id], onUpdate: Restrict, map: "pedido_cliente_fk")
   produtos_pedido produtos_pedido[]
 
-  @@index([id_cliente], map: "pedido_fk4")
+  @@index([id_cliente], map: "pedido_cliente_id_idx")
 }
 
 model produto {
-  id              Int               @id @unique(map: "id") @default(autoincrement())
+  id              Int               @id @default(autoincrement())
   nome            String            @db.VarChar(255)
   descricao       String            @db.VarChar(255)
   tamanho         String            @db.VarChar(255)
@@ -94,50 +95,50 @@ model produto {
   id_categoria    Int
   desconto        Int?
   novidades       Boolean?          @default(false)
-  categoria       categoria         @relation(fields: [id_categoria], references: [id], onUpdate: Restrict, map: "produto_fk7")
+  categoria       categoria         @relation(fields: [id_categoria], references: [id], onUpdate: Restrict, map: "produto_categoria_fk")
   produto_imagem  produto_imagem[]
   produtos_pedido produtos_pedido[]
   favoritos       favoritos[]
 
-  @@index([id_categoria], map: "produto_fk7")
+  @@index([id_categoria], map: "produto_categoria_id_idx")
 }
 
 model produto_imagem {
-  id         Int     @id @unique(map: "id") @default(autoincrement())
+  id         Int     @id @default(autoincrement())
   imagem     String  @db.Text
   id_produto Int
-  produto    produto @relation(fields: [id_produto], references: [id], onUpdate: Restrict, map: "produto_imagem_fk2")
+  produto    produto @relation(fields: [id_produto], references: [id], onUpdate: Restrict, map: "produto_imagem_produto_fk")
 
-  @@index([id_produto], map: "produto_imagem_fk2")
+  @@index([id_produto], map: "produto_imagem_produto_id_idx")
 }
 
 model banners {
-  id     Int    @id @unique(map: "id") @default(autoincrement())
+  id     Int    @id @default(autoincrement())
   imagem String @db.Text
   link   String @db.Text
 }
 
 model favoritos {
-  id         Int     @id @unique(map: "id") @default(autoincrement())
+  id         Int     @id @default(autoincrement())
   id_cliente Int
   id_produto Int
   cliente    cliente @relation(fields: [id_cliente], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "favoritos_cliente_fk")
   produto    produto @relation(fields: [id_produto], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "favoritos_produto_fk")
 
-  @@index([id_cliente], map: "favoritos_cliente_fk")
-  @@index([id_produto], map: "favoritos_produto_fk")
+  @@index([id_cliente], map: "favoritos_cliente_id_idx")
+  @@index([id_produto], map: "favoritos_produto_id_idx")
 }
 
 model produtos_pedido {
-  id         Int     @id @unique(map: "id") @default(autoincrement())
+  id         Int     @id @default(autoincrement())
   id_produto Int
   id_pedido  Int
   quantidade Int     @default(0)
-  produto    produto @relation(fields: [id_produto], references: [id], onUpdate: Restrict, map: "produtos_pedido_fk1")
-  pedido     pedido  @relation(fields: [id_pedido], references: [id], onUpdate: Restrict, map: "produtos_pedido_fk2")
+  produto    produto @relation(fields: [id_produto], references: [id], onUpdate: Restrict, map: "produtos_pedido_produto_fk")
+  pedido     pedido  @relation(fields: [id_pedido], references: [id], onUpdate: Restrict, map: "produtos_pedido_pedido_fk")
 
-  @@index([id_produto], map: "produtos_pedido_fk1")
-  @@index([id_pedido], map: "produtos_pedido_fk2")
+  @@index([id_produto], map: "produtos_pedido_produto_id_idx")
+  @@index([id_pedido], map: "produtos_pedido_pedido_id_idx")
 }
 
 model niveis {
