@@ -265,7 +265,11 @@ async function webhook(req) {
     const body = req.body ?? {};
     const notificationType = body.type ?? body.topic ?? req.query.type ?? req.query.topic;
 
+    console.log(body);
+
     if (notificationType && String(notificationType).toLowerCase() !== "payment") {
+        console.log("notificação ignorada");
+        
         return {
             status: 200,
             body: { tipo: "success", mensagem: "Notificação ignorada." }
@@ -274,6 +278,8 @@ async function webhook(req) {
 
     const paymentId = body.data?.id ?? body.id ?? req.query["data.id"] ?? req.query.id;
     if (paymentId === undefined || !/^\d+$/.test(String(paymentId))) {
+        console.log("ID do pagamento inválido ou ausente.");
+        
         return {
             status: 400,
             body: { tipo: "error", mensagem: "ID do pagamento inválido ou ausente." }
@@ -284,6 +290,8 @@ async function webhook(req) {
     let pagamentoMP;
     try {
         pagamentoMP = await payment.get({ id: String(paymentId) });
+        console.log(pagamentoMP);
+        
     } catch (error) {
         return {
             status: 502,
@@ -298,6 +306,8 @@ async function webhook(req) {
     }
 
     if (!pagamentoMP.status) {
+        console.log("O Mercado Pago retornou um pagamento sem status.");
+        
         throw new Error("O Mercado Pago retornou um pagamento sem status.");
     }
 
@@ -306,6 +316,8 @@ async function webhook(req) {
     });
 
     if (!pagamentoLocal) {
+        console.log("Pagamento não encontrado.");
+        
         return {
             status: 404,
             body: { tipo: "error", mensagem: "Pagamento não encontrado." }
@@ -348,7 +360,8 @@ async function webhook(req) {
             });
         }
     });
-
+    console.log("Notificação processada com sucesso.");
+    
     return {
         status: 200,
         body: {
