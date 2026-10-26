@@ -1,7 +1,38 @@
 import {Router} from "express"
-import { buscarTodos, buscarUm, criar, deletar, editar } from "../controllers/pagamentoController.js"
+import { buscarTodos, buscarUm, criar, deletar, editar, webhook } from "../controllers/pagamentoController.js"
 
 export const pagamentoRoutes = Router()
+
+// pagamentoRoutes.post("/webhook", async (req, res) => {
+//     // #swagger.tags = ['Pagamentos']
+//     // #swagger.description = 'Recebe notificações de pagamento do Mercado Pago e atualiza o pedido correspondente.'
+//     /* #swagger.parameters['obj'] = {
+//             in: 'body',
+//             schema: {
+//                 type: 'payment',
+//                 data: { id: '123456789' }
+//             }
+//     } */
+//     /* #swagger.responses[200] = {
+//             description: 'Notificação processada ou ignorada.'
+//     } */
+//     /* #swagger.responses[400] = {
+//             description: 'ID do pagamento inválido ou ausente.'
+//     } */
+//     /* #swagger.responses[404] = {
+//             description: 'Pagamento não encontrado.'
+//     } */
+//     try {
+//         const resultado = await webhook(req)
+//         res.status(resultado.status).json(resultado.body)
+//     } catch (error) {
+//         console.error("Erro ao processar webhook do Mercado Pago:", error);
+//         res.status(500).json({
+//             tipo: "error",
+//             mensagem: "Erro interno ao processar a notificação."
+//         });
+//     }
+// })
 
 pagamentoRoutes.get("/", async (req, res) => {
     // #swagger.tags = ['Pagamentos']

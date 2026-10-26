@@ -12,6 +12,7 @@ import swaggerUi from 'swagger-ui-express'
 import swaggerDocument from './src/docs/documentacao.json' with { type: "json" }
 import { login } from "./src/controllers/clienteController.js";
 import { rotaProtegida } from "./src/utils/index.js"
+import { webhook } from "./src/controllers/pagamentoController.js"
 
 const app = express()
 app.use(express.json())
@@ -82,6 +83,19 @@ app.use("/banners", bannerRoutes);
 app.use('/uploads/banners', express.static('./src/uploads/banners'));
 
 app.use('/uploads/produtos', express.static('./src/uploads/produtos'));
+
+app.post("/webhook", async (req, res) => {
+    try {
+        const resultado = await webhook(req);
+        res.status(resultado.status).json(resultado.body);
+    } catch (error) {
+        console.error("Erro ao processar webhook do Mercado Pago:", error);
+        res.status(500).json({
+            tipo: "error",
+            mensagem: "Erro interno ao processar a notificação."
+        });
+    }
+})
 
 app.use((req, res) => {
     res.status(404).json({

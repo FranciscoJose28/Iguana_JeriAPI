@@ -261,10 +261,112 @@ async function deletar(id) {
     }
 }
 
+async function webhook(req) {
+    const body = req.body ?? {};
+    const notificationType = body.type ?? body.topic ?? req.query.type ?? req.query.topic;
+
+    if (notificationType && String(notificationType).toLowerCase() !== "payment") {
+        return {
+            status: 200,
+            body: { tipo: "success", mensagem: "Notificação ignorada." }
+        };
+    }
+
+    const paymentId = body.data?.id ?? body.id ?? req.query["data.id"] ?? req.query.id;
+    if (paymentId === undefined || !/^\d+$/.test(String(paymentId))) {
+        return {
+            status: 400,
+            body: { tipo: "error", mensagem: "ID do pagamento inválido ou ausente." }
+        };
+    }
+
+    const payment = new Payment(client);
+    let pagamentoMP;
+    try {
+        pagamentoMP = await payment.get({ id: String(paymentId) });
+    } catch (error) {
+        return {
+            status: 502,
+            body: {
+                tipo: "error",
+                mensagem: "Falha ao consultar o pagamento no Mercado Pago.",
+                detalhes: error instanceof Error
+                    ? error.message
+                    : error
+            }
+        };
+    }
+
+    if (!pagamentoMP.status) {
+        throw new Error("O Mercado Pago retornou um pagamento sem status.");
+    }
+
+    const pagamentoLocal = await prisma.pagamento.findFirst({
+        where: { id_mercado_pago: String(pagamentoMP.id) }
+    });
+
+    if (!pagamentoLocal) {
+        return {
+            status: 404,
+            body: { tipo: "error", mensagem: "Pagamento não encontrado." }
+        };
+    }
+
+    const statusPedido = {
+        pending: "Pendente",
+        in_process: "Em processamento",
+        authorized: "Autorizado",
+        approved: "Pago",
+        rejected: "Rejeitado",
+        cancelled: "Cancelado",
+        refunded: "Reembolsado",
+        charged_back: "Contestado",
+        in_mediation: "Em disputa"
+    }[pagamentoMP.status];
+
+    await prisma.$transaction(async (tx) => {
+        await tx.pagamento.update({
+            where: { id: pagamentoLocal.id },
+            data: {
+                status: pagamentoMP.status,
+                ...(pagamentoMP.payment_method_id && {
+                    metodo: pagamentoMP.payment_method_id
+                }),
+                ...(pagamentoMP.date_approved && {
+                    data_pagamento: pagamentoMP.date_approved
+                }),
+                ...(typeof pagamentoMP.transaction_amount === "number" && {
+                    valor: pagamentoMP.transaction_amount
+                })
+            }
+        });
+
+        if (statusPedido) {
+            await tx.pedido.update({
+                where: { id: pagamentoLocal.id_pedido },
+                data: { status: statusPedido }
+            });
+        }
+    });
+
+    return {
+        status: 200,
+        body: {
+            tipo: "success",
+            mensagem: "Notificação processada com sucesso.",
+            pagamento: {
+                id: String(pagamentoMP.id),
+                status: pagamentoMP.status
+            }
+        }
+    };
+}
+
 export {
     buscarTodos,
     buscarUm,
     criar,
     editar,
-    deletar
+    deletar,
+    webhook
 }
