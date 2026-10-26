@@ -6,6 +6,41 @@ const client = new MercadoPagoConfig({
     accessToken: "TEST-5187935436662042-032319-8f331312da329d0eb3da0ce801349c3d-586090033",
 });
 
+const statusPedidoPorStatusPagamento = {
+    pending: "Pendente",
+    in_process: "Em processamento",
+    authorized: "Autorizado",
+    approved: "Pago",
+    rejected: "Rejeitado",
+    cancelled: "Cancelado",
+    refunded: "Reembolsado",
+    charged_back: "Contestado",
+    in_mediation: "Em disputa"
+};
+
+const mensagensStatusPagamento = {
+    pending_contingency: {
+        tipo: "warning",
+        mensagem: "Pagamento pendente de análise pelo Mercado Pago. Aguarde a atualização do status."
+    },
+    cc_rejected_call_for_authorize: {
+        tipo: "error",
+        mensagem: "Pagamento recusado. Entre em contato com o banco emissor para autorizar a compra."
+    },
+    cc_rejected_insufficient_amount: {
+        tipo: "error",
+        mensagem: "Pagamento recusado por saldo ou limite insuficiente. Tente outro cartão ou forma de pagamento."
+    },
+    cc_rejected_bad_filled_security_code: {
+        tipo: "error",
+        mensagem: "Pagamento recusado porque o código de segurança informado é inválido. Confira os dados ou tente outro cartão."
+    },
+    cc_rejected_bad_filled_date: {
+        tipo: "error",
+        mensagem: "Pagamento recusado porque a data de validade informada é inválida. Confira os dados do cartão."
+    }
+};
+
 async function buscarTodos() {
     try {
         return await prisma.pagamento.findMany()
@@ -153,19 +188,44 @@ async function criar(dados) {
             body: paymentBody
         });
 
-        await prisma.pagamento.create({
-            data: {
-                metodo: pagamentoMP.payment_method_id,
-                status: pagamentoMP.status,
-                data_pagamento: new Date().toISOString(),
-                valor: pagamentoMP.transaction_amount,
-                id_pedido: pedido.id,
-                id_mercado_pago: pagamentoMP.id.toString()
+        await prisma.$transaction(async (tx) => {
+            await tx.pagamento.create({
+                data: {
+                    metodo: pagamentoMP.payment_method_id,
+                    status: pagamentoMP.status,
+                    data_pagamento: pagamentoMP.date_approved ?? new Date().toISOString(),
+                    valor: pagamentoMP.transaction_amount,
+                    id_pedido: pedido.id,
+                    id_mercado_pago: pagamentoMP.id.toString()
+                }
+            });
+
+            const statusPedido = statusPedidoPorStatusPagamento[pagamentoMP.status];
+            if (statusPedido) {
+                await tx.pedido.update({
+                    where: { id: pedido.id },
+                    data: { status: statusPedido }
+                });
             }
         });
 
+        const retornoStatus = mensagensStatusPagamento[pagamentoMP.status_detail] ?? {
+            tipo: pagamentoMP.status === "approved"
+                ? "success"
+                : pagamentoMP.status === "rejected"
+                    ? "error"
+                    : "warning",
+            mensagem: pagamentoMP.status === "approved"
+                ? "Pagamento aprovado."
+                : pagamentoMP.status === "rejected"
+                    ? "Pagamento recusado pelo Mercado Pago."
+                    : `Pagamento com status "${pagamentoMP.status}".`
+        };
+
         return {
-            tipo: "success",
+            tipo: retornoStatus.tipo,
+            mensagem: retornoStatus.mensagem,
+            codigo_status: pagamentoMP.status_detail,
             pedido,
             pagamento: pagamentoMP
         };
@@ -324,17 +384,7 @@ async function webhook(req) {
         };
     }
 
-    const statusPedido = {
-        pending: "Pendente",
-        in_process: "Em processamento",
-        authorized: "Autorizado",
-        approved: "Pago",
-        rejected: "Rejeitado",
-        cancelled: "Cancelado",
-        refunded: "Reembolsado",
-        charged_back: "Contestado",
-        in_mediation: "Em disputa"
-    }[pagamentoMP.status];
+    const statusPedido = statusPedidoPorStatusPagamento[pagamentoMP.status];
 
     await prisma.$transaction(async (tx) => {
         await tx.pagamento.update({
