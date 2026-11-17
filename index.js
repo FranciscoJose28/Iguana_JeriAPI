@@ -15,8 +15,8 @@ import { rotaProtegida } from "./src/utils/index.js"
 import { webhook } from "./src/controllers/pagamentoController.js"
 
 const app = express()
-app.use(express.json())
-app.use(cors())
+app.use(express.json());
+app.use(cors());
 
 app.get("/", (req, res) => {
     res.redirect("/docs")
