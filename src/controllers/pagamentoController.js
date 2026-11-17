@@ -255,7 +255,7 @@ async function criar(dados) {
                         });
                     }
                 });
-            }
+            };
         } catch (rollbackError) {
             return {
                 tipo: "error",
