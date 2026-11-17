@@ -15,11 +15,11 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -p ${{ secrets.VPS_PORT }} -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
 
       - name: Enviar código para a VPS
         run: |
-          rsync -avz --delete \
+          rsync -avz --delete -e "ssh -p ${{ secrets.VPS_PORT }}" \
             --exclude '.git' \
             --exclude '.github' \
             --exclude 'node_modules' \
@@ -28,7 +28,7 @@ jobs:
 
       - name: Instalar dependências e reiniciar
         run: |
-          ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+          ssh -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
             cd /var/www/backend
             npm ci --omit=dev
             pm2 startOrReload ecosystem.config.js --env production
