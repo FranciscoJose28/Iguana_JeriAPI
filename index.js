@@ -16,7 +16,9 @@ import { webhook } from "./src/controllers/pagamentoController.js"
 
 const app = express()
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: ["https://iguanajeri.com.br", "https://www.iguanajeri.com.br"]
+}));
 
 app.get("/", (req, res) => {
     res.redirect("/docs")
